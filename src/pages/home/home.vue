@@ -2,27 +2,45 @@
   <div :class="['container']">
     <div class="head">
       <div class="my flex">
-        <img :src="require('../../assets/'+assetUrl+'head.png') " class="huo" mode />
+        <img
+          :src="require('../../assets/' + assetUrl + 'head.png')"
+          class="huo"
+          mode
+        />
         <div class="right">
           <div class="align-center">
             <div class="text">我的算力</div>
-            <img :src="require('../../assets/lv' + level + '.png')" class="lv" mode />
+            <img
+              :src="require('../../assets/lv' + level + '.png')"
+              class="lv"
+              mode
+            />
           </div>
           <div class="num alignLeft">{{ power }}</div>
-          <div class="smallMainInserveTxt alignLeft">累计邀请收益 {{ rewardCount }}</div>
+          <div class="smallMainInserveTxt alignLeft">
+            累计邀请收益 {{ rewardCount }}
+          </div>
         </div>
       </div>
       <div class="money space-between">
         <div class="item">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'wdye.png')" class="img" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'wdye.png')"
+              class="img"
+              mode
+            />
             <div class="text">我的余额</div>
           </div>
           <div class="num">{{ balance }}</div>
         </div>
         <div class="item">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'qwtx.png')" class="img1" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'qwtx.png')"
+              class="img1"
+              mode
+            />
             <div class="text">全网通证</div>
           </div>
           <div class="num">{{ totalSupply }}</div>
@@ -32,51 +50,153 @@
         <div class="text alignLeft">燃烧挖矿合约</div>
         <div class="space-between">
           <div class="num ellipsis">{{ contractAddress }}</div>
-          <img src="../../assets/copy.png" class="copy" @click="h5Copy(contractAddress)" mode />
+          <img
+            src="../../assets/copy.png"
+            class="copy"
+            @click="h5Copy(contractAddress)"
+            mode
+          />
         </div>
       </div>
     </div>
     <div class="cont">
-      <div class="my-box pleage-box" v-if="level < 2 || coinBalanceOf > 0">
+      <!-- <div class="my-box pleage-box" v-if="level < 2 || coinBalanceOf > 0">
         <div class="copy copy1 space-between">
           <div class="flex_v_start flex1">
             <div class="num">当前质押数量</div>
-            <div class="blue_num">{{coinBalanceOf}}</div>
+            <div class="blue_num">{{ coinBalanceOf }}</div>
           </div>
-          <div class="flex-box" style="background-color: #F6884F" @click="pledgeShow=true" v-if="level < 2">质押HT</div>
-          <div class="flex-box" @click="openPledgeOut" v-if="coinBalanceOf > 0">取出HT</div>
+          <div
+            class="flex-box"
+            style="background-color: #f6884f"
+            @click="pledgeShow = true"
+            v-if="level < 2"
+          >
+            质押HT
+          </div>
+          <div class="flex-box" @click="openPledgeOut" v-if="coinBalanceOf > 0">
+            取出HT
+          </div>
         </div>
-      </div>
+      </div> -->
       <div class="tab space-between">
         <div class="item" @click="showBurnFlag = true">
-          <img :src="require('../../assets/'+assetUrl+'tab1.png')" class="img" mode />
+          <img
+            :src="require('../../assets/' + assetUrl + 'tab1.png')"
+            class="img"
+            mode
+          />
           <div class="text">燃烧原料</div>
         </div>
         <div class="item" @click="showIncome">
-          <img :src="require('../../assets/'+assetUrl+'tab2.png')" class="img" mode />
+          <img
+            :src="require('../../assets/' + assetUrl + 'tab2.png')"
+            class="img"
+            mode
+          />
           <div class="text">挖取矿产</div>
         </div>
         <div class="item" @click="lvShow = true">
-          <img :src="require('../../assets/'+assetUrl+'level.png')" class="img" mode />
+          <img
+            :src="require('../../assets/' + assetUrl + 'level.png')"
+            class="img"
+            mode
+          />
           <div class="text">等级说明</div>
         </div>
         <div class="item" @click="h5Copy(myAddress)">
-          <img :src="require('../../assets/'+assetUrl+'tab4.png')" class="img" mode />
+          <img
+            :src="require('../../assets/' + assetUrl + 'tab4.png')"
+            class="img"
+            mode
+          />
           <div class="text">邀请好友</div>
         </div>
       </div>
-      <div class="line" v-if="receiveTimestamp != 0">上次领取奖励：{{ receiveTime }}</div>
+      <div class="line" v-if="receiveTimestamp != 0">
+        上次领取奖励：{{ receiveTime }}
+      </div>
+      <!-- <div class="my-box airdrop-box" v-if="show_airdrop || show_upgrade"> -->
+        <div class="my-box airdrop-box">
+        <div class="top space-between">
+          <div class="align-center">
+            <img
+              :src="require('../../assets/' + assetUrl + 'gift.png')"
+              class="img"
+              mode
+            />
+            <div class="text">领取空投</div>
+          </div>
+        </div>
+        <div class="copy copy1 space-between">
+          <div class="flex_v_start flex1">
+            <div class="num">空投数量</div>
+            <div class="blue_num">100 HBT</div>
+          </div>
+          <div class="flex-box round" @click="getAirdrop" v-if="!show_airdrop">领取空投</div>
+          <div
+            class="flex-box round"
+            style="background-color: #ff712a; margin-left: 10px"
+            @click="getUpgrade"
+            v-if="!show_upgrade"
+          >
+            <img
+              :src="require('../../assets/' + assetUrl + 'upgrade.png')"
+              class="upgrade_img"
+              mode
+            />
+            升级
+          </div>
+        </div>
+      </div>
+      <div class="my-box pleage-box">
+        <div class="copy space-between">
+          <div class="flex_v_start flex1">
+            <div class="num">HQKI质押数量</div>
+            <div class="blue_num">{{ coinBalanceOf }}</div>
+            <div class="flex-box round" @click="pledgeShow = true" >
+              <img
+              :src="require('../../assets/' + assetUrl + 'up.png')"
+              class="up_img"
+              mode
+            />
+              质押</div>
+          </div>
+          <div class="flex_v_start flex1">
+            <div class="num">USDT质押数量</div>
+            <div class="blue_num">{{ coinBalanceOf }}</div>
+            <div class="flex-box round" style="background-color: #585858" @click="openPledgeOut">
+              <img
+              :src="require('../../assets/' + assetUrl + 'down.png')"
+              class="down_img"
+              mode
+            />
+              取出</div>
+          </div>
+          
+        </div>
+        <div style="color:red; margin-top: 10px;font-size: 12px;">温馨提示: 需要同时质押HQKI和USDT才可以参与挖矿</div>
+      </div>
       <div class="my-box">
         <div class="top space-between">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'add.png')" class="img" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'add.png')"
+              class="img"
+              mode
+            />
             <div class="text">我的地址</div>
           </div>
           <div class="text">共邀请 {{ inviteCount }} 人</div>
         </div>
         <div class="copy space-between">
           <div class="num ellipsis">{{ myAddress }}</div>
-          <img :src="require('../../assets/'+assetUrl+'copy1.png')" class="copy-img" @click="h5Copy(myAddress)" mode />
+          <img
+            :src="require('../../assets/' + assetUrl + 'copy1.png')"
+            class="copy-img"
+            @click="h5Copy(myAddress)"
+            mode
+          />
         </div>
       </div>
       <div class="my-box">
@@ -87,7 +207,9 @@
           </div>
         </div>
         <div class="copy copy1 space-between">
-          <div class="num ellipsis" v-if="inviteAddress != ''">{{ inviteAddress }}</div>
+          <div class="num ellipsis" v-if="inviteAddress != ''">
+            {{ inviteAddress }}
+          </div>
           <input
             type="text"
             v-model="inviteAddressInput"
@@ -101,22 +223,30 @@
               inviteAddress != '' &&
               inviteAddress != '0x0000000000000000000000000000000000000000'
             "
-          >已绑定</div>
+          >
+            已绑定
+          </div>
           <div class="flex-box" v-else @click="registration">确定绑定</div>
         </div>
       </div>
 
       <div class="my-box qkswap">
         <div class="flex_h">
-          <img src="../../assets/qks.png" alt="">
+          <img src="../../assets/qks.png" alt="" />
           <div class="flex_v">
-            <div class="text2" style="text-align: left">Heco生态币种交易多快好省就选MDEX.COM</div>
-          <div class="text2" style="text-align: left">打造DeFi生态最大的集DEX、IMO、DAO为一体的平台</div>
-          <div class="text2" style="text-align: left">点击进入<a :href="config.tipsUrl" class="link"><b>{{config.tipsUrl}}</b></a></div>
+            <div class="text2" style="text-align: left">
+              Heco生态币种交易多快好省就选MDEX.COM
+            </div>
+            <div class="text2" style="text-align: left">
+              打造DeFi生态最大的集DEX、IMO、DAO为一体的平台
+            </div>
+            <div class="text2" style="text-align: left">
+              点击进入<a :href="config.tipsUrl" class="link"
+                ><b>{{ config.tipsUrl }}</b></a
+              >
+            </div>
           </div>
-          
         </div>
-        
       </div>
 
       <!-- <div class="my-box">
@@ -137,7 +267,11 @@
       <div class="flex-box">
         <div class="box">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'wenhao.png')" class="wenhao" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'wenhao.png')"
+              class="wenhao"
+              mode
+            />
             <div class="text">等级说明</div>
           </div>
           <div class="text1 alignLeft">
@@ -157,8 +291,7 @@
             <br />v1:算力0-499 v2:算力500-4999 v3:算力5000-9999
             v4:算力10000-19999 v5:算力20000+
             <br />*例如手续费20%，转账100个，转出方扣除125个，接收方获得100个，25个销毁。
-            <br />HBT手续费规则：
-            <br />实际转出＝转出数量×（1－手续费）
+            <br />HBT手续费规则： <br />实际转出＝转出数量×（1－手续费）
           </div>
           <div class="flex-box btn" @click="lvShow = false">好的</div>
         </div>
@@ -169,22 +302,35 @@
       <div class="flex-box">
         <div class="box1">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'rs.png')" class="rs" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'rs.png')"
+              class="rs"
+              mode
+            />
             <div class="text">燃烧原料</div>
           </div>
           <div class="text1 alignLeft">
             可用余额
-            <span>{{ balance }}</span>burn
+            <span>{{ balance }}</span
+            >burn
           </div>
           <div class="input-box space-between">
-            <input type="text" class="input" value placeholder="输入燃烧数量" v-model="amount" />
+            <input
+              type="text"
+              class="input"
+              value
+              placeholder="输入燃烧数量"
+              v-model="amount"
+            />
             <div class="align-center">
               <div class="text2">burn</div>
               <div class="line"></div>
               <div class="text3" @click="inputAll">全部</div>
             </div>
           </div>
-          <div class="tit alignLeft">* 确定提交后你燃烧的余额将销毁变成3倍算力</div>
+          <div class="tit alignLeft">
+            * 确定提交后你燃烧的余额将销毁变成3倍算力
+          </div>
           <div class="flex-box btn" @click="burn">确定燃烧</div>
           <div class="text4" @click="showBurnFlag = false">取消</div>
         </div>
@@ -195,7 +341,11 @@
       <div class="flex-box">
         <div class="box1">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'wq.png')" class="wq" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'wq.png')"
+              class="wq"
+              mode
+            />
             <div class="text">挖取矿产</div>
           </div>
           <div class="text5">
@@ -213,7 +363,11 @@
       <div class="flex-box">
         <div class="box1">
           <div class="align-center">
-            <img :src="require('../../assets/'+assetUrl+'lqjl.png')" class="lq" mode />
+            <img
+              :src="require('../../assets/' + assetUrl + 'lqjl.png')"
+              class="lq"
+              mode
+            />
             <div class="text">领取收益</div>
           </div>
           <div class="text5" v-if="receiveAble">
@@ -221,20 +375,38 @@
             <br />burn
           </div>
           <div class="time-box" v-else>
-            <div class="time" v-for="(item, index) in hour" :key="'1_' + index">{{ item }}</div>
+            <div class="time" v-for="(item, index) in hour" :key="'1_' + index">
+              {{ item }}
+            </div>
 
             <div class="bi">:</div>
-            <div class="time" v-for="(item, index) in minutes" :key="'2_' + index">{{ item }}</div>
+            <div
+              class="time"
+              v-for="(item, index) in minutes"
+              :key="'2_' + index"
+            >
+              {{ item }}
+            </div>
             <div class="bi">:</div>
-            <div class="time" v-for="(item, index) in seconds" :key="'3_' + index">{{ item }}</div>
+            <div
+              class="time"
+              v-for="(item, index) in seconds"
+              :key="'3_' + index"
+            >
+              {{ item }}
+            </div>
           </div>
-          <div class="last-time" v-if="!receiveAble">上次领取奖励：{{ receiveTime }}</div>
+          <div class="last-time" v-if="!receiveAble">
+            上次领取奖励：{{ receiveTime }}
+          </div>
           <!-- <div class="tit tit1">* 产出收益最多保留5天</div> -->
           <div class="tit tit1 tit2">* 等级达到Lv2,产出收益最多累计5次</div>
           <div
             :class="['flex-box', receiveAble ? 'btn' : 'btn-disable']"
             @click="getReceiveIncome"
-          >{{ receiveAble ? "确定领取" : "明日再来" }}</div>
+          >
+            {{ receiveAble ? "确定领取" : "明日再来" }}
+          </div>
           <div class="text4" @click="incomeFlag = false">取消</div>
         </div>
       </div>
@@ -251,7 +423,13 @@
             <span>{{ coinBalanceOf }} </span>HT
           </div>
           <div class="input-box space-between">
-            <input type="text" class="input" value placeholder="输入取出数量" v-model="amount" />
+            <input
+              type="text"
+              class="input"
+              value
+              placeholder="输入取出数量"
+              v-model="amount"
+            />
             <div class="align-center">
               <div class="text2">HT</div>
               <div class="line"></div>
@@ -269,21 +447,26 @@
       <div class="flex-box">
         <div class="box1">
           <div class="align-center">
-            <div class="text">质押HT</div>
+            <div class="text">质押资产</div>
           </div>
-          <div class="text1 alignLeft">
-            等级小于V1用户质押10HT可获得0.2%
+          <div class="text1 alignLeft">等级小于V1的用户最少质押{{minUsdt}}的USDT和{{minHqki}}数量的HQKI才可进行挖矿</div>
+          <div class="flex_h">
+            <div :class="['flex-box', plageName == 'USDT' ? 'fill-btn' : 'border-btn']" style="margin-left: 0" @click="plageName = 'USDT'">USDT</div>
+            <div :class="['flex-box', plageName == 'HQKI' ? 'fill-btn' : 'border-btn']" @click="plageName = 'HQKI'">HQKI</div>
           </div>
           <div class="input-box space-between">
-            <input type="text" class="input" value placeholder="输入质押数量" v-model="amount" />
+            <input
+              type="text"
+              class="input"
+              value
+              placeholder="输入质押数量"
+              v-model="amount"
+            />
             <div class="align-center">
               <div class="line"></div>
-              <div class="text2">HT</div>
-              
-              <!-- <div class="text3" @click="inputAll">全部</div> -->
+              <div class="text2">{{plageName}}</div>
             </div>
           </div>
-          <div class="tit">* 小于V1用户没有质押HT，产出率只有0.1%</div>
           <div class="flex-box btn" @click="handlePlege">确定质押</div>
           <div class="text4" @click="pledgeShow = false">取消</div>
         </div>
@@ -293,18 +476,18 @@
 </template>
 
 <script>
-// import h5Copy from '../js_sdk/junyi-h5-copy/junyi-h5-copy/junyi-h5-copy.js'
 import { h5Copy, initEth, timeUtils, vertify, Decimal } from "@/utils/utils";
 import { ethers } from "ethers";
-import { abi, abiPro } from "./abi";
+import { abi } from "./abi";
 import { Toast } from "vant";
-import {GLOBAL_CONFIGS} from '../../utils/global'
+import { GLOBAL_CONFIGS } from "../../utils/global";
 // 收益率,为了防止机器刷，LV1级qki余额大于1时，才能够拿到0.2%，否则拿到0.1%
 const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
   data() {
     return {
       contractAddress: "0x3eb7db4cc4ea93ed48b14baf8c6cc4e43391e571", // 合约地址
+      oldContractAddress: '0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93', // 老合约地址，用于查询power
       contract: null, // 当前的合约对象
       myAddress: "", // 我的地址
       balance: "0.00", // 我的余额
@@ -335,8 +518,22 @@ export default {
       expectAmount: 0, // 预估收益
       decimals: 2, //精度
       config: GLOBAL_CONFIGS,
-      assetUrl: '',
-      coinBalanceOf: 0
+      assetUrl: "",
+      coinBalanceOf: 0,
+      is_airdrop: false,
+      is_upgrade: false,
+      show_upgrade: false,
+      show_airdrop: false,
+      oldPower: 0,
+      minUsdt: 0,
+      minHqki: 0,
+      hqkiDecimals: 0,
+      usdtDecimals: 8,
+      pledgeUsdtAmount: 0, // 质押usdt的数量
+      pledgeHqkiAmount: 0, // 质押hqki的数量
+      usdtContractAddress: '0xa71EdC38d189767582C38A3145b5873052c3e47a',
+      hqkiContractAddress: '0x164F31A5bfA746bcc55bd2279A400B645E99aaeB',
+      plageName: '',
     };
   },
   async created() {
@@ -345,7 +542,7 @@ export default {
         ? "0x3eb7db4cc4ea93ed48b14baf8c6cc4e43391e571"
         : GLOBAL_CONFIGS.contractAdress;
     await this.getAddress();
-    let currAbi = process.env.NODE_ENV == "development" ? abi : abiPro;
+    let currAbi = abi;
     var contract = new ethers.Contract(
       this.contractAddress,
       currAbi,
@@ -362,6 +559,20 @@ export default {
     await this.getBalance();
     await this.getPower();
     await this.getPledgeAmount();
+    await this.getIsAirdrop();
+    await this.getIsUpgrade();
+    if(this.power == 0) {
+      if(this.is_upgrade) {
+        await this.getOldPower();
+      } else {
+        if(this.is_airdrop) {
+          this.show_airdrop = true;
+          this.show_upgrade = false;
+        }
+      }
+    }
+    await this.getMinUsdt();
+    await this.getMinHqki();
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
@@ -384,9 +595,7 @@ export default {
         }
       } else {
         this.incomeFlag = true;
-        let nowTimeStr = Date.now()
-          .toString()
-          .substring(0, 10);
+        let nowTimeStr = Date.now().toString().substring(0, 10);
         let distance = this.receiveTimestamp + this.epoch - Number(nowTimeStr);
         // 如果distance大于0表示收益还不可以领取。需要计算倒计时
         if (distance <= 0) {
@@ -423,6 +632,22 @@ export default {
     async getPower() {
       let [error, res] = await this.to(this.contract.power(this.myAddress));
       this.doResponse(error, res, "power", this.decimals);
+    },
+    async getOldPower() {
+      let contract = new ethers.Contract(
+        this.oldContractAddress,
+        abi,
+        this.signer
+      );
+      let [error, res] = await this.to(contract.power(this.myAddress))
+      this.doResponse(error, res, "oldPower", this.decimals);
+      if(this.oldPower < 100) {
+        this.show_upgrade = false;
+        this.show_airdrop = true;
+      } else {
+        this.show_upgrade = true;
+        this.show_airdrop = false;
+      }
     },
     // 获取累计收益
     async getRewardCount() {
@@ -467,14 +692,19 @@ export default {
         Toast("请输入绑定邀请的地址");
         return;
       }
-      if(this.inviteAddressInput.toLowerCase() == this.myAddress.toLowerCase()){
-         Toast("不能绑定自己！");
-          this.inviteAddressInput = '';
+      if (
+        this.inviteAddressInput.toLowerCase() == this.myAddress.toLowerCase()
+      ) {
+        Toast("不能绑定自己！");
+        this.inviteAddressInput = "";
         return;
       }
-      if (this.inviteAddressInput.toLowerCase() == this.contractAddress.toLowerCase()) {
+      if (
+        this.inviteAddressInput.toLowerCase() ==
+        this.contractAddress.toLowerCase()
+      ) {
         Toast("不能绑定合约地址为邀请人！");
-        this.inviteAddressInput = '';
+        this.inviteAddressInput = "";
         return;
       }
 
@@ -495,16 +725,18 @@ export default {
       }
       let burn_amount =
         ethers.FixedNumber.from(this.amount.toString()) * 10 ** this.decimals;
-        const gasLimit = await this.getEstimateGas(() =>
-          this.contract.estimateGas.burn(burn_amount)
-        );
-        if (gasLimit === 0) {
-          return;
-        }
-      let [error, res] = await this.to(this.contract.burn(burn_amount, {
-            gasLimit,
-            gasPrice: ethers.utils.parseUnits("1", "gwei"),
-          } ));
+      const gasLimit = await this.getEstimateGas(() =>
+        this.contract.estimateGas.burn(burn_amount)
+      );
+      if (gasLimit === 0) {
+        return;
+      }
+      let [error, res] = await this.to(
+        this.contract.burn(burn_amount, {
+          gasLimit,
+          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+        })
+      );
       if (this.doResponse(error, res)) {
         this.amount = "";
         this.showBurnFlag = false;
@@ -519,29 +751,108 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-          this.contract.estimateGas.mint()
-        );
-        if (gasLimit === 0) {
-          return;
-        }
-      let [error, res] = await this.to(this.contract.mint({
-            gasLimit,
-            gasPrice: ethers.utils.parseUnits("1", "gwei"),
-          }));
+        this.contract.estimateGas.mint()
+      );
+      if (gasLimit === 0) {
+        return;
+      }
+      let [error, res] = await this.to(
+        this.contract.mint({
+          gasLimit,
+          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+        })
+      );
       if (this.doResponse(error, res, "")) {
         this.incomeFlag = false;
         Toast("收益领取成功！");
         await this.queryTransation(res.hash, true);
       }
     },
+    async getIsAirdrop() {
+      let [error, res] = await this.to(this.contract.is_airdrop());
+      console.log('getIsAirdrop======', res)
+      if(this.doResponse(error, res)) {
+        this.is_airdrop = res
+      }
+    },
+    // 领取空投
+    async getAirdrop() {
+      if (!this.is_airdrop) {
+        Toast("空投还未开始");
+        return;
+      }
+      if(this.power != 0) {
+        Toast("我的算力为0才可以参加领取空投活动！");
+        return;
+      }
+      const gasLimit = await this.getEstimateGas(() =>
+        this.contract.estimateGas.mint()
+      );
+      if (gasLimit === 0) {
+        return;
+      }
+      let [error, res] = await this.to(
+        this.contract.airdrop({
+          gasLimit,
+          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+        })
+      );
+      if (this.doResponse(error, res, "")) {
+        Toast("空投领取成功！");
+        await this.queryTransation(res.hash);
+      }
+    },
+    // 是否可以升级
+    async getIsUpgrade() {
+      let [error, res] = await this.to(this.contract.is_upgrade());
+      console.log('getIsUpgrade======', res)
+      if(this.doResponse(error, res)) {
+        this.is_upgrade = res
+      }
+    },
+    // 升级
+    async getUpgrade() {
+      if (!this.is_upgrade) {
+        Toast("现在还不能升级");
+        return;
+      }
+      if(this.power != 0) {
+        Toast("算力为0才可以升级！");
+        return;
+      }
+      const gasLimit = await this.getEstimateGas(() =>
+        this.contract.estimateGas.mint()
+      );
+      if (gasLimit === 0) {
+        return;
+      }
+      let [error, res] = await this.to(
+        this.contract.airdrop({
+          gasLimit,
+          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+        })
+      );
+      if (this.doResponse(error, res, "")) {
+        Toast("空投领取成功！");
+        await this.queryTransation(res.hash);
+      }
+    },
+    // 获取用户最少需要质押的Usdt数量
+    async getMinUsdt() {
+      let [error, res] = await this.to(this.contract.anti_bot());
+      this.doResponse(error, res, 'minUsdt', this.usdtDecimals)
+    },
+    // 获取用户最少需要质押的hqki数量
+    async getMinHqki() {
+      let [error, res] = await this.to(this.contract.requireHQKI());
+      this.doResponse(error, res, 'minHqki', this.hqkiDecimals)
+    },
     openPledgeOut() {
-      let nowTimeStr = Date.now()
-        .toString()
-        .substring(0, 10);
+      let nowTimeStr = Date.now().toString().substring(0, 10);
       // 如果distance大于0表示收益还不可以领取。需要计算倒计时
       let distance = this.receiveTimestamp + 86400 - Number(nowTimeStr);
       if (distance <= 0) {
-        this.pledgeOutShow=true
+        this.pledgeOutShow = true;
       } else {
         Toast("取出HT需要在上次挖矿后24小时!");
       }
@@ -555,7 +866,7 @@ export default {
         let etherString = ethers.utils.formatEther(balance);
         this.coinBalanceOf = parseFloat(etherString);
       } else {
-        this.coinBalanceOf = 0.0
+        this.coinBalanceOf = 0.0;
       }
     },
     // 取出质押
@@ -566,58 +877,63 @@ export default {
       }
       let amount = ethers.utils.parseEther(this.amount.toString());
       const gasLimit = await this.getEstimateGas(() =>
-          this.contract.estimateGas.withdraw(amount)
-        );
-        if (gasLimit === 0) {
-          return;
-        }
-        let [error, res] = await this.to(
-          this.contract.withdraw(amount, {
-            gasLimit,
-            gasPrice: ethers.utils.parseUnits("1", "gwei"),
-          })
-        );
-        if (this.doResponse(error, res)) {
-          this.pledgeOutShow = false;
-          this.amount = "";
-          Toast("提交请求成功，等待区块确认");
-          await this.queryTransation(res.hash);
-        }
+        this.contract.estimateGas.withdraw(amount)
+      );
+      if (gasLimit === 0) {
+        return;
+      }
+      let [error, res] = await this.to(
+        this.contract.withdraw(amount, {
+          gasLimit,
+          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+        })
+      );
+      if (this.doResponse(error, res)) {
+        this.pledgeOutShow = false;
+        this.amount = "";
+        Toast("提交请求成功，等待区块确认");
+        await this.queryTransation(res.hash);
+      }
     },
     // 质押
     async handlePlege() {
+      if(this.plageName === '') {
+        Toast('请先选择质押的资产类型');
+        return;
+      }
       if (this.amount == "") {
         Toast("请输入您的质押数量");
         return;
       }
       let amount = ethers.utils.parseEther(this.amount.toString());
-      let tx = {
-          from: this.myAddress, //当前用户地址
-          to: this.contract.address, //接收地址
-          value: amount,
-        };
-        const gasLimit = await this.getEstimateGas(() =>
-          this.signer.estimateGas(tx)
-        );
-        if (gasLimit === 0) {
-          return;
-        }
-        tx = Object.assign(tx, {
+      let contract = new ethers.Contract(
+        this.plageName === 'USDT' ? this.usdtContractAddress : this.hqkiContractAddress,
+        abi,
+        this.signer
+      );
+      const gasLimit = await this.getEstimateGas(() =>
+        this.signer.estimateGas(tx)
+      );
+      if (gasLimit === 0) {
+        return;
+      }
+      
+      let [error, res] = await this.to(contract
+        .withdraw(amount, {
           gasLimit: Number(gasLimit),
           gasPrice: ethers.utils.parseUnits("1", "gwei"),
-        });
-        let [error, res] = await this.to(this.signer.sendTransaction(tx));
-        if (this.doResponse(error, res)) {
-          this.pledgeShow = false;
-          this.amount = "";
-          Toast("提交请求成功，等待区块确认");
-          await this.queryTransation(res.hash);
-        }
-
+        }));
+      if (this.doResponse(error, res)) {
+        this.pledgeShow = false;
+        this.plageName = '';
+        this.amount = "";
+        Toast("提交请求成功，等待区块确认");
+        await this.queryTransation(res.hash);
+      }
     },
     // 查询Transaction
     async queryTransation(hash, updateTime) {
-      await this.provider.waitForTransaction(hash).then(async receipt => {
+      await this.provider.waitForTransaction(hash).then(async (receipt) => {
         Toast("区块打包成功", receipt);
         await this.getBalance();
         await this.getPower();
@@ -680,14 +996,14 @@ export default {
         }
         a[i] = code;
       }
-      return a.reduce(function(acc, c) {
+      return a.reduce(function (acc, c) {
         acc = 16 * acc + c;
         return acc;
       }, 0);
     },
     // response公共处理方法
     doResponse(error, res, keyName, Decimal = 0) {
-      console.log(keyName+'================', error, res);
+      console.log(keyName + "================", error, res);
       if (error == null) {
         if (keyName) {
           let hex = ethers.utils.hexValue(res);
@@ -726,8 +1042,6 @@ export default {
     tab(num) {
       this.active = num;
     },
-
-    
   },
   // computed: {
   //   receiveAble: function(){
@@ -757,9 +1071,7 @@ export default {
         this.receiveTime = this.timestampToTime(this.receiveTimestamp);
       }
       // 获取当前时间
-      let nowTimeStr = Date.now()
-        .toString()
-        .substring(0, 10);
+      let nowTimeStr = Date.now().toString().substring(0, 10);
       // 如果distance大于0表示收益还不可以领取。需要计算倒计时
       let distance = this.receiveTimestamp + this.epoch - Number(nowTimeStr);
       if (distance > 0) {
@@ -772,8 +1084,8 @@ export default {
         this.calcExpectAmount(distance);
         this.receiveAble = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -951,14 +1263,24 @@ export default {
   .my-box {
     margin-top: 60px;
     padding: 0 48px;
-    &.pleage-box{
-      margin-top: 0px;
+    &.pleage-box {
       margin-bottom: 40px;
       .copy {
-        .flex-box{
-          width: 131px;
-          height: 62px;
-          margin-left: 20px;
+        background-color: #f3f3f3;
+        height: auto;
+        padding-top: 48px;
+        padding-bottom: 48px;
+        .flex-box {
+          // width: 131px;
+          // height: 62px;
+          // margin-left: 20px;
+          margin-top: 30px;
+          width: 50% !important;
+
+          &.round {
+            border-radius: 30px;
+          }
+          
         }
       }
     }
@@ -972,7 +1294,8 @@ export default {
       height: 30px;
     }
 
-    .text, .text2 {
+    .text,
+    .text2 {
       font-size: 24px;
       color: #b09b99;
       margin-left: 14px;
@@ -1004,15 +1327,36 @@ export default {
         border-radius: 16px;
         font-size: 24px;
         color: #fff;
+        &.round {
+          border-radius: 50px;
+          padding: 20px 30px;
+          width: auto;
+          height: auto;
+        }
+        .upgrade_img{
+          width: 16px;
+          height: 30px;
+          margin-right: 10px;
+        }
+        .up_img{
+          width: 24px;
+          height: 33px;
+          margin-right: 10px;
+        }
+        .down_img{
+          width: 24px;
+          height: 33px;
+          margin-right: 10px;
+        }
       }
 
       .num {
         font-size: 20px;
         color: #737278;
       }
-      .blue_num{
+      .blue_num {
         font-size: 40px;
-        color: #001D52;
+        color: #001d52;
       }
 
       .copy-img {
@@ -1170,6 +1514,24 @@ export default {
         color: #fff;
         margin-top: 50px;
       }
+      .border-btn, .fill-btn{
+        // width: 80%;
+        height: 90px;
+        
+        border-radius: 20px;
+        font-size: 32px;
+        
+        margin-top: 50px;
+        margin-left: 40px;
+      }
+      .border-btn{
+        border: 1px solid #979797;
+        color: #7D7D82;
+      }
+      .fill-btn{
+        background-color: #DC5242;
+        color: #fff;
+      }
       .text4 {
         text-align: center;
         font-size: 32px;
@@ -1235,8 +1597,8 @@ export default {
 }
 
 .link {
-    color: #b09b99;
-    text-decoration-line: underline;
+  color: #b09b99;
+  text-decoration-line: underline;
 }
 
 .qkswap {
@@ -1247,7 +1609,7 @@ export default {
   }
 
   .text {
-    border-bottom: 2px solid #F2F2F2;
+    border-bottom: 2px solid #f2f2f2;
     padding-bottom: 35px;
   }
 }
@@ -1255,7 +1617,7 @@ export default {
 .zdcy {
   margin-top: 42px;
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
   color: #b09b99;
   font-size: 11px;
@@ -1352,6 +1714,6 @@ export default {
 //   .hy {
 //     background: linear-gradient(135deg, #005AFF 0%, #337CE4 100%);
 //   }
-  
+
 // }
 </style>
