@@ -103,8 +103,8 @@ contract burn_token_v2 is SafeMath{
     );
 
     
-    event  Deposit(address indexed dst, uint wad);
-    event  Withdrawal(address indexed src, uint wad);
+    event  Deposit(address indexed dst,address token, uint wad);
+    event  Withdrawal(address indexed src,address token, uint wad);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
     constructor(
@@ -134,7 +134,7 @@ contract burn_token_v2 is SafeMath{
     function depositToken(address token,uint256 amount) public {
         TransferHelper.safeTransferFrom(token, msg.sender, address(this), amount);
         TokenBalanceOf[msg.sender][token] += amount;
-        emit Deposit(msg.sender, amount);
+        emit Deposit(msg.sender,token, amount);
     }
 
     function withdrawToken(address token,uint256 amount) public {
@@ -142,7 +142,7 @@ contract burn_token_v2 is SafeMath{
         require(TokenBalanceOf[msg.sender][token] >= amount);
         TokenBalanceOf[msg.sender][token] -= amount;
         TransferHelper.safeTransfer(token,msg.sender,amount);
-        Withdrawal(msg.sender, amount);
+        Withdrawal(msg.sender,token, amount);
     }
 
 
