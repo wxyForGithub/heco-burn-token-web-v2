@@ -911,19 +911,19 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.mint()
+        this.contract.estimateGas.upgrade()
       );
       if (gasLimit === 0) {
         return;
       }
       let [error, res] = await this.to(
-        this.contract.airdrop({
+        this.contract.upgrade({
           gasLimit,
           gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
-        Toast("空投领取成功！");
+        Toast("升级成功！");
         await this.queryTransation(res.hash);
       }
     },
@@ -1057,21 +1057,21 @@ export default {
         this.plageName = "";
         this.amount = "";
         const gasLimit2 = await this.getEstimateGas(() =>
-            this.contract.estimateGas.depositToken(tokenAddr, amount)
-          );
-          if (gasLimit2 === 0) {
-            return;
-          }
-          let [error, res] = await this.to(
-            this.contract.depositToken(tokenAddr, amount, {
-              gasLimit: Number(gasLimit2),
-              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
-            })
-          );
-          if (this.doResponse(error, res)) {
-            Toast("提交请求成功，等待区块确认");
-            await this.queryTransation(res.hash);
-          }
+          this.contract.estimateGas.depositToken(tokenAddr, amount)  
+        );
+        if (gasLimit2 === 0) {
+          return;
+        }
+        let [error, res] = await this.to(
+          this.contract.depositToken(tokenAddr, amount, {
+            gasLimit: Number(gasLimit2),
+            gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+          })
+        );
+        if (this.doResponse(error, res)) {
+          Toast("提交请求成功，等待区块确认");
+          await this.queryTransation(res.hash);
+        }
       }
       
     },
@@ -1185,7 +1185,6 @@ export default {
       if (this.doResponse(err, res)) {
         const hex = ethers.utils.hexValue(res);
         const Value = this.hex2int(hex);
-        console.log("getEstimateGas========", Value);
         return String(Decimal.mul(Value, 1.5)).split(".")[0];
       } else {
         return 0;
