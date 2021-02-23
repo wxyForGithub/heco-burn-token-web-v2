@@ -534,6 +534,7 @@ export default {
       usdtContractAddress: '0xa71EdC38d189767582C38A3145b5873052c3e47a',
       hqkiContractAddress: '0x164F31A5bfA746bcc55bd2279A400B645E99aaeB',
       plageName: '',
+      min_gasprice: 1,
     };
   },
   async created() {
@@ -573,12 +574,21 @@ export default {
     }
     await this.getMinUsdt();
     await this.getMinHqki();
+    this.initContract();
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
     show(num) {
       this.type = num;
       this.bgShow = true;
+    },
+    // 获取合约初始化数据
+    async initContract() {
+      // 获取最小气价
+      let [error, minGasprice] = await this.to(this.contract.min_gasprice());
+      this.doResponse(error, minGasprice);
+      // TODO: 转换为gwei
+      console.log('minGasprice==========', minGasprice, error);
     },
     // 展示领取收益
     async showIncome() {
@@ -734,7 +744,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.burn(burn_amount, {
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(this.min_gasprice, "gwei"),
         })
       );
       if (this.doResponse(error, res)) {
@@ -759,7 +769,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.mint({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(this.min_gasprice, "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -794,7 +804,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.airdrop({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(this.min_gasprice, "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -829,7 +839,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.airdrop({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(this.min_gasprice, "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -885,7 +895,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.withdraw(amount, {
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(this.min_gasprice, "gwei"),
         })
       );
       if (this.doResponse(error, res)) {
@@ -912,7 +922,7 @@ export default {
         this.signer
       );
       const gasLimit = await this.getEstimateGas(() =>
-        this.signer.estimateGas(tx)
+        contract.withDraw(amount)
       );
       if (gasLimit === 0) {
         return;
@@ -921,7 +931,7 @@ export default {
       let [error, res] = await this.to(contract
         .withdraw(amount, {
           gasLimit: Number(gasLimit),
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(this.min_gasprice, "gwei"),
         }));
       if (this.doResponse(error, res)) {
         this.pledgeShow = false;
