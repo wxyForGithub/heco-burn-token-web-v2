@@ -50,6 +50,12 @@ const abi=[
 			},
 			{
 				"indexed": false,
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "wad",
 				"type": "uint256"
@@ -157,6 +163,12 @@ const abi=[
 			},
 			{
 				"indexed": false,
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"indexed": false,
 				"internalType": "uint256",
 				"name": "wad",
 				"type": "uint256"
@@ -222,13 +234,7 @@ const abi=[
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address[]",
-				"name": "address_array",
-				"type": "address[]"
-			}
-		],
+		"inputs": [],
 		"name": "airdrop",
 		"outputs": [],
 		"stateMutability": "nonpayable",

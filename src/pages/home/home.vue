@@ -116,8 +116,7 @@
       <div class="line" v-if="receiveTimestamp != 0">
         上次领取奖励：{{ receiveTime }}
       </div>
-      <!-- <div class="my-box airdrop-box" v-if="show_airdrop || show_upgrade"> -->
-        <div class="my-box airdrop-box">
+      <div class="my-box airdrop-box" v-if="show_airdrop || show_upgrade">
         <div class="top space-between">
           <div class="align-center">
             <img
@@ -133,12 +132,14 @@
             <div class="num">空投数量</div>
             <div class="blue_num">100 HBT</div>
           </div>
-          <div class="flex-box round" @click="getAirdrop" v-if="!show_airdrop">领取空投</div>
+          <div class="flex-box round" @click="getAirdrop" v-if="show_airdrop">
+            领取空投
+          </div>
           <div
             class="flex-box round"
             style="background-color: #ff712a; margin-left: 10px"
             @click="getUpgrade"
-            v-if="!show_upgrade"
+            v-if="show_upgrade"
           >
             <img
               :src="require('../../assets/' + assetUrl + 'upgrade.png')"
@@ -153,29 +154,38 @@
         <div class="copy space-between">
           <div class="flex_v_start flex1">
             <div class="num">HQKI质押数量</div>
-            <div class="blue_num">{{ coinBalanceOf }}</div>
-            <div class="flex-box round" @click="pledgeShow = true" >
+            <div class="blue_num">{{ hqikBalanceOf }}</div>
+            <div class="flex-box round" @click="pledgeShow = true">
               <img
-              :src="require('../../assets/' + assetUrl + 'up.png')"
-              class="up_img"
-              mode
-            />
-              质押</div>
+                :src="require('../../assets/' + assetUrl + 'up.png')"
+                class="up_img"
+                mode
+              />
+              质押
+            </div>
           </div>
           <div class="flex_v_start flex1">
             <div class="num">USDT质押数量</div>
-            <div class="blue_num">{{ coinBalanceOf }}</div>
-            <div class="flex-box round" style="background-color: #585858" @click="openPledgeOut">
+            <div class="blue_num">{{ usdtBalanceOf }}</div>
+            <div
+              class="flex-box round"
+              style="background-color: #585858"
+              @click="openPledgeOut"
+            >
               <img
-              :src="require('../../assets/' + assetUrl + 'down.png')"
-              class="down_img"
-              mode
-            />
-              取出</div>
+                :src="require('../../assets/' + assetUrl + 'down.png')"
+                class="down_img"
+                mode
+              />
+              取出
+            </div>
           </div>
-          
         </div>
-        <div style="color:red; margin-top: 10px;font-size: 12px;">温馨提示: 需要同时质押HQKI和USDT才可以参与挖矿</div>
+        <div style="color: red; margin-top: 10px; font-size: 12px">
+          温馨提示: 需要同时最少质押{{ minHqki }}个HQKI和{{
+            minUsdt
+          }}个USDT才可以参与挖矿
+        </div>
       </div>
       <div class="my-box">
         <div class="top space-between">
@@ -248,20 +258,6 @@
           </div>
         </div>
       </div>
-
-      <!-- <div class="my-box">
-        <div class="text2"><b>Burn Token</b> 的智能合约已通过<b>知道创宇审核</b></div>
-        <div class="text"><a class="link" href="https://qkfilecdn.io/ipfs/QmXbSeRoC5QoJgNCvyz4igZZyy1shYgcTmBqSnJCRUafSt">点击查看审核安全报告</a></div>
-        <div class="text"><a class="link" href="https://qkfilecdn.io/ipfs/QmeZgnaFybXxFp9SorHTNkoMFZ5zHSmb7BTSSss5Cftmab">Click to view the audit security report</a></div>
-      </div> -->
-
-      <!-- <div class="zdcy">
-        <div class="item"><img width="30px" src="../../assets/zdcy.png" mode /></div>
-        <div class="item">
-            <div>知道创宇云安全认证</div>
-            <div>WWW.YUNAQ.COM</div>
-        </div>
-      </div> -->
     </div>
     <div class="bg" v-show="lvShow">
       <div class="flex-box">
@@ -416,12 +412,36 @@
       <div class="flex-box">
         <div class="box1">
           <div class="align-center">
-            <div class="text">取出HT</div>
+            <div class="text">取出资产</div>
+          </div>
+          <div class="flex_h">
+            <div
+              :class="[
+                'flex-box',
+                plageName == 'USDT' ? 'fill-btn' : 'border-btn',
+              ]"
+              style="margin-left: 0"
+              @click="plageName = 'USDT'"
+            >
+              USDT
+            </div>
+            <div
+              :class="[
+                'flex-box',
+                plageName == 'HQKI' ? 'fill-btn' : 'border-btn',
+              ]"
+              @click="plageName = 'HQKI'"
+            >
+              HQKI
+            </div>
           </div>
           <div class="text1 alignLeft">
             可取出数量
-            <span>{{ coinBalanceOf }} </span>HT
+            <span
+              >{{ plageName == "USDT" ? usdtBalanceOf : hqikBalanceOf }} </span
+            >{{ plageName }}
           </div>
+
           <div class="input-box space-between">
             <input
               type="text"
@@ -431,12 +451,19 @@
               v-model="amount"
             />
             <div class="align-center">
-              <div class="text2">HT</div>
+              <div class="text2">{{ plageName }}</div>
               <div class="line"></div>
-              <div class="text3" @click="amount = coinBalanceOf">全部</div>
+              <div
+                class="text3"
+                @click="
+                  amount = plageName == 'USDT' ? usdtBalanceOf : hqikBalanceOf
+                "
+              >
+                全部
+              </div>
             </div>
           </div>
-          <div class="tit">* 取出HT需要在上次挖矿后24小时</div>
+          <div class="tit">* 取出资产需要在上次挖矿后24小时</div>
           <div class="flex-box btn" @click="withDraw">确定取出</div>
           <div class="text4" @click="pledgeOutShow = false">取消</div>
         </div>
@@ -449,10 +476,31 @@
           <div class="align-center">
             <div class="text">质押资产</div>
           </div>
-          <div class="text1 alignLeft">等级小于V1的用户最少质押{{minUsdt}}的USDT和{{minHqki}}数量的HQKI才可进行挖矿</div>
+          <div class="text1 alignLeft">
+            等级小于V1的用户最少质押{{ minUsdt }}的USDT和{{
+              minHqki
+            }}数量的HQKI才可进行挖矿
+          </div>
           <div class="flex_h">
-            <div :class="['flex-box', plageName == 'USDT' ? 'fill-btn' : 'border-btn']" style="margin-left: 0" @click="plageName = 'USDT'">USDT</div>
-            <div :class="['flex-box', plageName == 'HQKI' ? 'fill-btn' : 'border-btn']" @click="plageName = 'HQKI'">HQKI</div>
+            <div
+              :class="[
+                'flex-box',
+                plageName == 'USDT' ? 'fill-btn' : 'border-btn',
+              ]"
+              style="margin-left: 0"
+              @click="plageName = 'USDT'"
+            >
+              USDT
+            </div>
+            <div
+              :class="[
+                'flex-box',
+                plageName == 'HQKI' ? 'fill-btn' : 'border-btn',
+              ]"
+              @click="plageName = 'HQKI'"
+            >
+              HQKI
+            </div>
           </div>
           <div class="input-box space-between">
             <input
@@ -464,7 +512,7 @@
             />
             <div class="align-center">
               <div class="line"></div>
-              <div class="text2">{{plageName}}</div>
+              <div class="text2">{{ plageName }}</div>
             </div>
           </div>
           <div class="flex-box btn" @click="handlePlege">确定质押</div>
@@ -486,8 +534,8 @@ const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
   data() {
     return {
-      contractAddress: "0x3eb7db4cc4ea93ed48b14baf8c6cc4e43391e571", // 合约地址
-      oldContractAddress: '0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93', // 老合约地址，用于查询power
+      contractAddress: "0x8A7d9098C364b97ACf4C6d6A7a0F27A1c44df6ca", // 合约地址
+      oldContractAddress: "0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93", // 老合约地址，用于查询power
       contract: null, // 当前的合约对象
       myAddress: "", // 我的地址
       balance: "0.00", // 我的余额
@@ -527,20 +575,21 @@ export default {
       oldPower: 0,
       minUsdt: 0,
       minHqki: 0,
-      hqkiDecimals: 0,
-      usdtDecimals: 8,
+      hqkiDecimals: 18,
+      usdtDecimals: 18,
+      hqkiSymbol: "",
+      usdtSymbol: "",
       pledgeUsdtAmount: 0, // 质押usdt的数量
       pledgeHqkiAmount: 0, // 质押hqki的数量
-      usdtContractAddress: '0xa71EdC38d189767582C38A3145b5873052c3e47a',
-      hqkiContractAddress: '0x164F31A5bfA746bcc55bd2279A400B645E99aaeB',
-      plageName: '',
+      usdtContractAddress: "0xa71EdC38d189767582C38A3145b5873052c3e47a",
+      hqkiContractAddress: "0x164F31A5bfA746bcc55bd2279A400B645E99aaeB",
+      plageName: "",
+      min_gasprice: 1,
+      usdtBalanceOf: 0,
+      hqikBalanceOf: 0,
     };
   },
   async created() {
-    this.contractAddress =
-      process.env.NODE_ENV == "development"
-        ? "0x3eb7db4cc4ea93ed48b14baf8c6cc4e43391e571"
-        : GLOBAL_CONFIGS.contractAdress;
     await this.getAddress();
     let currAbi = abi;
     var contract = new ethers.Contract(
@@ -558,27 +607,70 @@ export default {
     await this.getInviteAddress();
     await this.getBalance();
     await this.getPower();
-    await this.getPledgeAmount();
-    await this.getIsAirdrop();
+    if (this.power == 0) {
+      await this.getIsAirdrop();
     await this.getIsUpgrade();
-    if(this.power == 0) {
-      if(this.is_upgrade) {
+      if (this.is_upgrade) {
         await this.getOldPower();
       } else {
-        if(this.is_airdrop) {
+        if (this.is_airdrop) {
           this.show_airdrop = true;
           this.show_upgrade = false;
         }
       }
     }
-    await this.getMinUsdt();
-    await this.getMinHqki();
+    await this.initContract();
+    this.getPledgeAmount();
+    // await this.getMinUsdt();
+    // await this.getMinHqki();
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
     show(num) {
       this.type = num;
       this.bgShow = true;
+    },
+    // 获取合约初始化数据，以后都不会更新的方法，只请求一次
+    async initContract() {
+      // 获取最小气价
+      let [error, minGasprice] = await this.to(this.contract.min_gasprice());
+      this.doResponse(error, minGasprice, "min_gasprice", 9);
+
+      // 获取token1
+      let [error1, token1] = await this.to(this.contract.HQKIToken());
+      if (this.doResponse(error1, token1)) {
+        const token1Contract = new ethers.Contract(token1, abi, this.signer);
+        let [error1_2, token1Decimals] = await this.to(
+          token1Contract.decimals()
+        );
+        if (this.doResponse(error1_2, token1Decimals)) {
+          this.hqkiDecimals = token1Decimals;
+        }
+        let [error1_3, token1Symbol] = await this.to(token1Contract.symbol());
+        if (this.doResponse(error1_3, token1Symbol)) {
+          this.hqkiSymbol = token1Symbol;
+        }
+        let [error1_4, token1Min] = await this.to(this.contract.requireHQKI());
+        this.doResponse(error1_4, token1Min, "minHqki", this.hqkiDecimals);
+      }
+
+      // 获取token2
+      let [error2, token2] = await this.to(this.contract.requireToken());
+      if (this.doResponse(error2, token2)) {
+        const token2Contract = new ethers.Contract(token2, abi, this.signer);
+        let [error2_2, token2Decimals] = await this.to(
+          token2Contract.decimals()
+        );
+        if (this.doResponse(error2_2, token2Decimals)) {
+          this.usdtDecimals = token2Decimals;
+        }
+        let [error2_3, token2Symbol] = await this.to(token2Contract.symbol());
+        if (this.doResponse(error2_3, token2Symbol)) {
+          this.usdtSymbol = token2Symbol;
+        }
+        let [error2_4, token2Min] = await this.to(this.contract.anti_bot());
+        this.doResponse(error2_4, token2Min, "minUsdt", this.usdtDecimals);
+      }
     },
     // 展示领取收益
     async showIncome() {
@@ -639,9 +731,9 @@ export default {
         abi,
         this.signer
       );
-      let [error, res] = await this.to(contract.power(this.myAddress))
+      let [error, res] = await this.to(contract.power(this.myAddress));
       this.doResponse(error, res, "oldPower", this.decimals);
-      if(this.oldPower < 100) {
+      if (this.oldPower < 100) {
         this.show_upgrade = false;
         this.show_airdrop = true;
       } else {
@@ -734,7 +826,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.burn(burn_amount, {
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
       if (this.doResponse(error, res)) {
@@ -759,7 +851,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.mint({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -770,9 +862,8 @@ export default {
     },
     async getIsAirdrop() {
       let [error, res] = await this.to(this.contract.is_airdrop());
-      console.log('getIsAirdrop======', res)
-      if(this.doResponse(error, res)) {
-        this.is_airdrop = res
+      if (this.doResponse(error, res)) {
+        this.is_airdrop = res;
       }
     },
     // 领取空投
@@ -781,12 +872,12 @@ export default {
         Toast("空投还未开始");
         return;
       }
-      if(this.power != 0) {
+      if (this.power != 0) {
         Toast("我的算力为0才可以参加领取空投活动！");
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.mint()
+        this.contract.estimateGas.airdrop()
       );
       if (gasLimit === 0) {
         return;
@@ -794,7 +885,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.airdrop({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -805,9 +896,8 @@ export default {
     // 是否可以升级
     async getIsUpgrade() {
       let [error, res] = await this.to(this.contract.is_upgrade());
-      console.log('getIsUpgrade======', res)
-      if(this.doResponse(error, res)) {
-        this.is_upgrade = res
+      if (this.doResponse(error, res)) {
+        this.is_upgrade = res;
       }
     },
     // 升级
@@ -816,7 +906,7 @@ export default {
         Toast("现在还不能升级");
         return;
       }
-      if(this.power != 0) {
+      if (this.power != 0) {
         Toast("算力为0才可以升级！");
         return;
       }
@@ -829,23 +919,13 @@ export default {
       let [error, res] = await this.to(
         this.contract.airdrop({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
         Toast("空投领取成功！");
         await this.queryTransation(res.hash);
       }
-    },
-    // 获取用户最少需要质押的Usdt数量
-    async getMinUsdt() {
-      let [error, res] = await this.to(this.contract.anti_bot());
-      this.doResponse(error, res, 'minUsdt', this.usdtDecimals)
-    },
-    // 获取用户最少需要质押的hqki数量
-    async getMinHqki() {
-      let [error, res] = await this.to(this.contract.requireHQKI());
-      this.doResponse(error, res, 'minHqki', this.hqkiDecimals)
     },
     openPledgeOut() {
       let nowTimeStr = Date.now().toString().substring(0, 10);
@@ -859,37 +939,51 @@ export default {
     },
     // 获取质押数量
     async getPledgeAmount() {
-      let [error, balance] = await this.to(
-        this.contract.CoinBalanceOf(this.myAddress)
+      let [erro1, Token1balance] = await this.to(
+        this.contract.TokenBalanceOf(this.myAddress, this.usdtContractAddress)
       );
-      if (error == null) {
-        let etherString = ethers.utils.formatEther(balance);
-        this.coinBalanceOf = parseFloat(etherString);
-      } else {
-        this.coinBalanceOf = 0.0;
-      }
+      this.doResponse(erro1, Token1balance, "usdtBalanceOf", this.usdtDecimals);
+      let [error2, Token1balance2] = await this.to(
+        this.contract.TokenBalanceOf(this.myAddress, this.hqkiContractAddress)
+      );
+      this.doResponse(
+        error2,
+        Token1balance2,
+        "hqikBalanceOf",
+        this.hqkiDecimals
+      );
+      console.log(this.hqikBalanceOf, this.usdtBalanceOf, erro1, Token1balance, error2, Token1balance2)
     },
     // 取出质押
     async withDraw() {
+      if (this.plageName === "") {
+        Toast("请先选择质押的资产类型");
+        return;
+      }
       if (this.amount == "") {
         Toast("请输入您的取出质押数量");
         return;
       }
       let amount = ethers.utils.parseEther(this.amount.toString());
+      let tokenAddr =
+        this.plageName === "USDT"
+          ? this.usdtContractAddress
+          : this.hqkiContractAddress;
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.withdraw(amount)
+        this.contract.estimateGas.withdrawToken(tokenAddr, amount)
       );
       if (gasLimit === 0) {
         return;
       }
       let [error, res] = await this.to(
-        this.contract.withdraw(amount, {
+        this.contract.withdrawToken(tokenAddr, amount, {
           gasLimit,
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
+          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
       if (this.doResponse(error, res)) {
         this.pledgeOutShow = false;
+        this.plageName = "";
         this.amount = "";
         Toast("提交请求成功，等待区块确认");
         await this.queryTransation(res.hash);
@@ -897,8 +991,8 @@ export default {
     },
     // 质押
     async handlePlege() {
-      if(this.plageName === '') {
-        Toast('请先选择质押的资产类型');
+      if (this.plageName === "") {
+        Toast("请先选择质押的资产类型");
         return;
       }
       if (this.amount == "") {
@@ -906,44 +1000,103 @@ export default {
         return;
       }
       let amount = ethers.utils.parseEther(this.amount.toString());
-      let contract = new ethers.Contract(
-        this.plageName === 'USDT' ? this.usdtContractAddress : this.hqkiContractAddress,
-        abi,
-        this.signer
-      );
-      const gasLimit = await this.getEstimateGas(() =>
-        this.signer.estimateGas(tx)
-      );
-      if (gasLimit === 0) {
-        return;
+      let tokenAddr =
+        this.plageName === "USDT"
+          ? this.usdtContractAddress
+          : this.hqkiContractAddress;
+      let contract = new ethers.Contract(tokenAddr, abi, this.signer);
+      let [err2, allowce] = await this.to(contract.allowance(this.myAddress, this.contract.address))
+      let response = [false,];
+      
+      if(this.doResponse(err2, allowce)) {
+        const hex = ethers.utils.hexValue(allowce)
+        const Value = Decimal.div(this.hex2int(hex), ethers.BigNumber.from(10).pow(this.decimals))
+       
+        if (!(Decimal.sub(Value, amount) >= 0)) {
+          const gasLimit1 = await this.getEstimateGas(() =>
+            contract.estimateGas.approve(this.contract.address, amount)
+          );
+          if (gasLimit1 === 0) {
+            return;
+          }
+          response = await this.to(
+            contract.approve(this.contract.address, '1000000000000000000000000000000000000000000000000000000000000000000000000000', {
+              gasLimit: Number(gasLimit1),
+              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+            })
+          );
+        }
+      }
+      let [err, hash] = response;
+      if(err == null) {
+        Toast('权限申请中...');
+        this.pledgeShow = false;
+        this.plageName = "";
+        this.amount = "";
+        await this.queryTransation(hash.hash, null, async () => {
+          const gasLimit2 = await this.getEstimateGas(() =>
+            this.contract.estimateGas.depositToken(tokenAddr, amount)
+          );
+          if (gasLimit2 === 0) {
+            return;
+          }
+          let [error, res] = await this.to(
+            this.contract.depositToken(tokenAddr, amount, {
+              gasLimit: Number(gasLimit2),
+              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+            })
+          );
+          if (this.doResponse(error, res)) {
+            Toast("提交请求成功，等待区块确认");
+            await this.queryTransation(res.hash);
+          }
+        });
+      } else {
+        Toast('质押中...');
+        this.pledgeShow = false;
+        this.plageName = "";
+        this.amount = "";
+        const gasLimit2 = await this.getEstimateGas(() =>
+            this.contract.estimateGas.depositToken(tokenAddr, amount)
+          );
+          if (gasLimit2 === 0) {
+            return;
+          }
+          let [error, res] = await this.to(
+            this.contract.depositToken(tokenAddr, amount, {
+              gasLimit: Number(gasLimit2),
+              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+            })
+          );
+          if (this.doResponse(error, res)) {
+            Toast("提交请求成功，等待区块确认");
+            await this.queryTransation(res.hash);
+          }
       }
       
-      let [error, res] = await this.to(contract
-        .withdraw(amount, {
-          gasLimit: Number(gasLimit),
-          gasPrice: ethers.utils.parseUnits("1", "gwei"),
-        }));
-      if (this.doResponse(error, res)) {
-        this.pledgeShow = false;
-        this.plageName = '';
-        this.amount = "";
-        Toast("提交请求成功，等待区块确认");
-        await this.queryTransation(res.hash);
-      }
     },
     // 查询Transaction
-    async queryTransation(hash, updateTime) {
+    async queryTransation(hash, updateTime, callback) {
       await this.provider.waitForTransaction(hash).then(async (receipt) => {
         Toast("区块打包成功", receipt);
-        await this.getBalance();
-        await this.getPower();
-        await this.getTotalSupply();
-        this.getPledgeAmount();
-        if (updateTime) {
-          await this.getRewardCount();
-          await this.getEpoch();
-          await this.getReceiveTime();
+        if(callback) {
+          callback();
+        } else {
+          await this.getBalance();
+          await this.getPower();
+          await this.getTotalSupply();
+          this.getPledgeAmount();
+          if(this.power != 0) {
+            this.show_upgrade = false
+            this.show_airdrop = false
+          }
+          if (updateTime) {
+            await this.getRewardCount();
+            await this.getEpoch();
+            await this.getReceiveTime();
+          }
         }
+        
       });
     },
     async calcExpectAmount(distance) {
@@ -1003,7 +1156,7 @@ export default {
     },
     // response公共处理方法
     doResponse(error, res, keyName, Decimal = 0) {
-      console.log(keyName + "================", error, res);
+      // console.log(keyName + "================", error, res);
       if (error == null) {
         if (keyName) {
           let hex = ethers.utils.hexValue(res);
@@ -1038,7 +1191,30 @@ export default {
         return 0;
       }
     },
-
+    async checkAuthorize (contract, spenderAddress, decimals, compareAmount) {
+      const [error, res] = await this.toAsync(contract.allowance(this.address, spenderAddress))
+      if (this.doResponse(error, res)) {
+        const hex = ethers.utils.hexValue(res)
+        const Value = Decimal.div(this.hex2int(hex), ethers.BigNumber.from(10).pow(decimals))
+        if (Decimal.sub(Value, compareAmount) >= 0) {
+          return true
+        } else {
+          // QUSDT每次都需要归0之后才能重新授权
+          if ((contract.address).toLowerCase() === '0xdf0e293cc3c7ba051763ff6b026da0853d446e38' && String(Value) !== '0') {
+            await this.authorize(
+              0,
+              decimals,
+              contract,
+              this.routerAddress,
+              () => {},
+            )
+          }
+          return false
+        }
+      } else {
+        return false
+      }
+    },
     tab(num) {
       this.active = num;
     },
@@ -1280,7 +1456,6 @@ export default {
           &.round {
             border-radius: 30px;
           }
-          
         }
       }
     }
@@ -1333,17 +1508,17 @@ export default {
           width: auto;
           height: auto;
         }
-        .upgrade_img{
+        .upgrade_img {
           width: 16px;
           height: 30px;
           margin-right: 10px;
         }
-        .up_img{
+        .up_img {
           width: 24px;
           height: 33px;
           margin-right: 10px;
         }
-        .down_img{
+        .down_img {
           width: 24px;
           height: 33px;
           margin-right: 10px;
@@ -1514,22 +1689,23 @@ export default {
         color: #fff;
         margin-top: 50px;
       }
-      .border-btn, .fill-btn{
+      .border-btn,
+      .fill-btn {
         // width: 80%;
         height: 90px;
-        
+
         border-radius: 20px;
         font-size: 32px;
-        
+
         margin-top: 50px;
         margin-left: 40px;
       }
-      .border-btn{
+      .border-btn {
         border: 1px solid #979797;
-        color: #7D7D82;
+        color: #7d7d82;
       }
-      .fill-btn{
-        background-color: #DC5242;
+      .fill-btn {
+        background-color: #dc5242;
         color: #fff;
       }
       .text4 {
