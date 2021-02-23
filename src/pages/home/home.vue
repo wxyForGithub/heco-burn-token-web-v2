@@ -534,7 +534,7 @@ const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
   data() {
     return {
-      contractAddress: "0x8A7d9098C364b97ACf4C6d6A7a0F27A1c44df6ca", // 合约地址
+      contractAddress: "0x0aED572593c689957F6238f9fbf1522ef89C22dF", // 合约地址
       oldContractAddress: "0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93", // 老合约地址，用于查询power
       contract: null, // 当前的合约对象
       myAddress: "", // 我的地址
@@ -910,15 +910,9 @@ export default {
         Toast("算力为0才可以升级！");
         return;
       }
-      const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.upgrade()
-      );
-      if (gasLimit === 0) {
-        return;
-      }
       let [error, res] = await this.to(
         this.contract.upgrade({
-          gasLimit,
+          gasLimit:100000,
           gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
