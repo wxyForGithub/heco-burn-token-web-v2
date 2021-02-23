@@ -372,6 +372,7 @@ contract burn_token_v2 is SafeMath{
         uint256 hbt_power = burn_token(0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93).power(msg.sender);
         if(hbt_power > 100)//老合约没有算力就不用升级
         {
+            power[msg.sender] = hbt_power;
             totalPower += hbt_power;
             totalUsersAmount++;
         }
@@ -489,9 +490,9 @@ contract burn_token_v2 is SafeMath{
 
         uint miner_days=(block.timestamp - last_miner[msg.sender])/epoch;
         
-        if(miner_days > 5)
+        if(miner_days > 7)
         {
-            miner_days = 5;//单次最多领取5天的
+            miner_days = 7;//单次最多领取7天的
         }
         
         //第一次挖矿只能1天
