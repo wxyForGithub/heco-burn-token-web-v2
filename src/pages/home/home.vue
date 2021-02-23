@@ -534,7 +534,7 @@ const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
   data() {
     return {
-      contractAddress: "0x0aED572593c689957F6238f9fbf1522ef89C22dF", // 合约地址
+      contractAddress: "0x0a441eC1A4E5f85f918A614aa257Ead8b977028b", // 合约地址
       oldContractAddress: "0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93", // 老合约地址，用于查询power
       contract: null, // 当前的合约对象
       myAddress: "", // 我的地址
@@ -564,7 +564,7 @@ export default {
       receiveAble: false, // 收益是否可以被领取
       amount: "", // 燃烧数量
       expectAmount: 0, // 预估收益
-      decimals: 2, //精度
+      decimals: 3, //精度
       config: GLOBAL_CONFIGS,
       assetUrl: "",
       coinBalanceOf: 0,
@@ -818,7 +818,7 @@ export default {
       let burn_amount =
         ethers.FixedNumber.from(this.amount.toString()) * 10 ** this.decimals;
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.burn(burn_amount)
+        this.contract.estimateGas.burn(burn_amount,{gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -843,7 +843,7 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.mint()
+        this.contract.estimateGas.mint({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -877,7 +877,7 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.airdrop()
+        this.contract.estimateGas.airdrop({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -910,9 +910,15 @@ export default {
         Toast("算力为0才可以升级！");
         return;
       }
+      const gasLimit = await this.getEstimateGas(() =>
+        this.contract.estimateGas.upgrade({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
+      );
+      if (gasLimit === 0) {
+        return;
+      }
       let [error, res] = await this.to(
         this.contract.upgrade({
-          gasLimit:100000,
+          gasLimit,
           gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
