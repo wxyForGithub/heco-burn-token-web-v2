@@ -48,7 +48,7 @@ library TransferHelper {
     }
 }
 
-contract token is SafeMath{
+contract burn_token_v2 is SafeMath{
     string public name;
     string public symbol;
     uint8 public decimals = 3;
@@ -103,8 +103,8 @@ contract token is SafeMath{
     );
 
     
-    event  Deposit(address indexed dst, uint wad);
-    event  Withdrawal(address indexed src, uint wad);
+    event  Deposit(address indexed dst,address token, uint wad);
+    event  Withdrawal(address indexed src,address token, uint wad);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
     constructor(
@@ -134,7 +134,7 @@ contract token is SafeMath{
     function depositToken(address token,uint256 amount) public {
         TransferHelper.safeTransferFrom(token, msg.sender, address(this), amount);
         TokenBalanceOf[msg.sender][token] += amount;
-        emit Deposit(msg.sender, amount);
+        emit Deposit(msg.sender,token, amount);
     }
 
     function withdrawToken(address token,uint256 amount) public {
@@ -142,7 +142,7 @@ contract token is SafeMath{
         require(TokenBalanceOf[msg.sender][token] >= amount);
         TokenBalanceOf[msg.sender][token] -= amount;
         TransferHelper.safeTransfer(token,msg.sender,amount);
-        Withdrawal(msg.sender, amount);
+        Withdrawal(msg.sender,token, amount);
     }
 
 
@@ -369,7 +369,7 @@ contract token is SafeMath{
         if(tx.gasprice < min_gasprice) revert("min_gasprice");
         require(power[msg.sender] == 0);//零算力账号才可以
         require(is_upgrade);//需要开启空投
-        uint hbt_power = token(0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93).power(msg.sender);
+        uint hbt_power = burn_token(0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93).power(msg.sender);
         if(hbt_power > 100)//老合约没有算力就不用升级
         {
             totalPower += hbt_power;
@@ -378,7 +378,7 @@ contract token is SafeMath{
     }
     
     //空投,用户自己可以申请领取算力
-    function airdrop(address[] memory address_array) public{
+    function airdrop() public{
         if(tx.gasprice < min_gasprice) revert("min_gasprice");
         require(power[msg.sender] == 0);//零算力账号才可以
         require(is_airdrop);//需要开启空投
