@@ -31,7 +31,7 @@ contract SafeMath {
 }
 interface  burn_token {
     //获取老合约的算力
-    function power(address owner) external view returns (uint);
+    function power(address owner) external view returns (uint256);
 }
 
 library TransferHelper {
@@ -369,7 +369,7 @@ contract burn_token_v2 is SafeMath{
         if(tx.gasprice < min_gasprice) revert("min_gasprice");
         require(power[msg.sender] == 0);//零算力账号才可以
         require(is_upgrade);//需要开启空投
-        uint hbt_power = burn_token(0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93).power(msg.sender);
+        uint256 hbt_power = burn_token(0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93).power(msg.sender);
         if(hbt_power > 100)//老合约没有算力就不用升级
         {
             totalPower += hbt_power;
