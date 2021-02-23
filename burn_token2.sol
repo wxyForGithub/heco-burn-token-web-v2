@@ -63,7 +63,7 @@ contract burn_token_v2 is SafeMath{
     bool public is_upgrade = true;//是否开启老合约升级到新合约
     bool public is_mint = false;//是否开启挖矿
     
-    uint public anti_bot = 10e8;//如果v1用户qki余额小于这个值，转化率只有0.1%。
+    uint public anti_bot = 10e18;//如果v1用户usdt余额小于这个值，不能挖矿
     uint public requireHQKI = 0;//需要的qki数量
     address public HQKIToken = 0x164F31A5bfA746bcc55bd2279A400B645E99aaeB;//hqki
     uint public min_gasprice = 1 gwei;//最低gas价格
