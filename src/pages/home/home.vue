@@ -150,7 +150,7 @@
           </div>
         </div>
       </div>
-      <div class="my-box pleage-box">
+      <div class="my-box pleage-box" v-if="level < 2 || usdtBalanceOf > 0 || hqikBalanceOf > 0">
         <div class="copy space-between">
           <div class="flex_v_start flex1">
             <div class="num">HQKI质押数量</div>
@@ -396,7 +396,7 @@
             上次领取奖励：{{ receiveTime }}
           </div>
           <!-- <div class="tit tit1">* 产出收益最多保留5天</div> -->
-          <div class="tit tit1 tit2">* 等级达到Lv2,产出收益最多累计5次</div>
+          <div class="tit tit1 tit2">* 等级达到Lv2,产出收益最多累计7次</div>
           <div
             :class="['flex-box', receiveAble ? 'btn' : 'btn-disable']"
             @click="getReceiveIncome"
@@ -570,6 +570,7 @@ export default {
       coinBalanceOf: 0,
       is_airdrop: false,
       is_upgrade: false,
+      is_mint: false,
       show_upgrade: false,
       show_airdrop: false,
       oldPower: 0,
@@ -600,18 +601,18 @@ export default {
     this.contract = contract;
     await this.getDecimals();
     await this.getEpoch();
-    await this.getTotalSupply();
-    await this.getinviteCount();
-    await this.getReceiveTime();
-    await this.getRewardCount();
-    await this.getInviteAddress();
-    await this.getBalance();
+    this.getTotalSupply();
+    this.getinviteCount();
+    this.getReceiveTime();
+    this.getRewardCount();
+    this.getInviteAddress();
+    this.getBalance();
     await this.getPower();
     if (this.power == 0) {
       await this.getIsAirdrop();
-    await this.getIsUpgrade();
+      await this.getIsUpgrade();
       if (this.is_upgrade) {
-        await this.getOldPower();
+        this.getOldPower();
       } else {
         if (this.is_airdrop) {
           this.show_airdrop = true;
@@ -621,8 +622,6 @@ export default {
     }
     await this.initContract();
     this.getPledgeAmount();
-    // await this.getMinUsdt();
-    // await this.getMinHqki();
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
@@ -671,9 +670,19 @@ export default {
         let [error2_4, token2Min] = await this.to(this.contract.anti_bot());
         this.doResponse(error2_4, token2Min, "minUsdt", this.usdtDecimals);
       }
+
+      // 获取是否可以进行挖矿
+      let [error3, res1] = await this.to(this.contract.is_mint());
+      if (this.doResponse(error3, res1)) {
+        this.is_mint = res1;
+      }
     },
     // 展示领取收益
     async showIncome() {
+      if(!this.is_mint){
+        Toast('现在还不能进行挖矿');
+        return;
+      }
       // 新用户且算力不为0，进入页面就可以领取一次收益
       if (this.receiveTimestamp == 0) {
         if (this.power != 0) {
@@ -725,6 +734,7 @@ export default {
       let [error, res] = await this.to(this.contract.power(this.myAddress));
       this.doResponse(error, res, "power", this.decimals);
     },
+    // 从老合约上获取算力
     async getOldPower() {
       let contract = new ethers.Contract(
         this.oldContractAddress,
@@ -1188,30 +1198,6 @@ export default {
         return String(Decimal.mul(Value, 1.5)).split(".")[0];
       } else {
         return 0;
-      }
-    },
-    async checkAuthorize (contract, spenderAddress, decimals, compareAmount) {
-      const [error, res] = await this.toAsync(contract.allowance(this.address, spenderAddress))
-      if (this.doResponse(error, res)) {
-        const hex = ethers.utils.hexValue(res)
-        const Value = Decimal.div(this.hex2int(hex), ethers.BigNumber.from(10).pow(decimals))
-        if (Decimal.sub(Value, compareAmount) >= 0) {
-          return true
-        } else {
-          // QUSDT每次都需要归0之后才能重新授权
-          if ((contract.address).toLowerCase() === '0xdf0e293cc3c7ba051763ff6b026da0853d446e38' && String(Value) !== '0') {
-            await this.authorize(
-              0,
-              decimals,
-              contract,
-              this.routerAddress,
-              () => {},
-            )
-          }
-          return false
-        }
-      } else {
-        return false
       }
     },
     tab(num) {
