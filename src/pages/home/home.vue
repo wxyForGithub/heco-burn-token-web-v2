@@ -828,7 +828,7 @@ export default {
       let burn_amount =
         ethers.FixedNumber.from(this.amount.toString()) * 10 ** this.decimals;
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.burn(burn_amount,{gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
+        this.contract.estimateGas.burn(burn_amount,{gasPrice: ethers.utils.parseUnits("1.0001", "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -836,7 +836,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.burn(burn_amount, {
           gasLimit,
-          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+          gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
         })
       );
       if (this.doResponse(error, res)) {
@@ -853,7 +853,7 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.mint({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
+        this.contract.estimateGas.mint({gasPrice: ethers.utils.parseUnits("1.0001", "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -861,7 +861,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.mint({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+          gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -887,7 +887,7 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.airdrop({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
+        this.contract.estimateGas.airdrop({gasPrice: ethers.utils.parseUnits("1.0001", "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -895,7 +895,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.airdrop({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+          gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -921,7 +921,7 @@ export default {
         return;
       }
       const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.upgrade({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
+        this.contract.estimateGas.upgrade({gasPrice: ethers.utils.parseUnits("1.0001", "gwei")})
       );
       if (gasLimit === 0) {
         return;
@@ -929,7 +929,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.upgrade({
           gasLimit,
-          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+          gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
         })
       );
       if (this.doResponse(error, res, "")) {
@@ -988,7 +988,7 @@ export default {
       let [error, res] = await this.to(
         this.contract.withdrawToken(tokenAddr, amount, {
           gasLimit,
-          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+          gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
         })
       );
       if (this.doResponse(error, res)) {
@@ -1032,7 +1032,7 @@ export default {
           response = await this.to(
             contract.approve(this.contract.address, '1000000000000000000000000000000000000000000000000000000000000000000000000000', {
               gasLimit: Number(gasLimit1),
-              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+              gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
             })
           );
         }
@@ -1053,7 +1053,7 @@ export default {
           let [error, res] = await this.to(
             this.contract.depositToken(tokenAddr, amount, {
               gasLimit: Number(gasLimit2),
-              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+              gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
             })
           );
           if (this.doResponse(error, res)) {
@@ -1075,7 +1075,7 @@ export default {
         let [error, res] = await this.to(
           this.contract.depositToken(tokenAddr, amount, {
             gasLimit: Number(gasLimit2),
-            gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
+            gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
           })
         );
         if (this.doResponse(error, res)) {
