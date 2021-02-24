@@ -151,6 +151,7 @@
         </div>
       </div>
       <div class="my-box pleage-box" v-if="level < 2 || usdtBalanceOf > 0 || hqikBalanceOf > 0">
+        
         <div class="copy space-between">
           <div class="flex_v_start flex1">
             <div class="num">HQKI质押数量</div>
@@ -184,7 +185,7 @@
         <div style="color: red; margin-top: 10px; font-size: 12px">
           温馨提示: 需要同时最少质押{{ minHqki }}个HQKI和{{
             minUsdt
-          }}个USDT才可以参与挖矿
+          }}个USDT才可以参与挖矿,随着HBT价格上升，会提高质押门槛。
         </div>
       </div>
       <div class="my-box">
