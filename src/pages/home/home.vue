@@ -534,7 +534,7 @@ const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
   data() {
     return {
-      contractAddress: "0x0a441eC1A4E5f85f918A614aa257Ead8b977028b", // 合约地址
+      contractAddress: "0x55d80e05f27aDdAaDD139Afc0612446DF21A8471", // 合约地址
       oldContractAddress: "0x9EcB5b9eac588F23c6627f1Ce0122D896c4C5C93", // 老合约地址，用于查询power
       contract: null, // 当前的合约对象
       myAddress: "", // 我的地址
