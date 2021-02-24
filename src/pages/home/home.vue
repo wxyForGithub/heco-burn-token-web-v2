@@ -308,7 +308,7 @@
           <div class="text1 alignLeft">
             可用余额
             <span>{{ balance }}</span
-            >burn
+            >HBT
           </div>
           <div class="input-box space-between">
             <input
@@ -319,7 +319,7 @@
               v-model="amount"
             />
             <div class="align-center">
-              <div class="text2">burn</div>
+              <div class="text2">HBT</div>
               <div class="line"></div>
               <div class="text3" @click="inputAll">全部</div>
             </div>
@@ -368,7 +368,7 @@
           </div>
           <div class="text5" v-if="receiveAble">
             <span class="hugeMainTxt">{{ expectAmount }}</span>
-            <br />burn
+            <br />HBT
           </div>
           <div class="time-box" v-else>
             <div class="time" v-for="(item, index) in hour" :key="'1_' + index">
@@ -1113,11 +1113,12 @@ export default {
       // 计算阶段奖励
       let currRate = "0.001";
       if (this.level == 1) {
-        if (this.coinBalanceOf < 1) {
-          currRate = "0.001";
-        } else {
-          currRate = RATE[this.level - 1];
-        }
+        // if (this.coinBalanceOf < 1) {
+        //   currRate = "0.001";
+        // } else {
+        //   currRate = RATE[this.level - 1];
+        // }
+        currRate = RATE[this.level - 1];
       } else {
         currRate = RATE[this.level - 1];
       }
@@ -1133,8 +1134,8 @@ export default {
             day = 1;
           }
         } else {
-          if (day > 5) {
-            day = 5;
+          if (day > 7) {
+            day = 7;
           }
         }
       }
