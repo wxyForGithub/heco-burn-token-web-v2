@@ -886,15 +886,9 @@ export default {
         Toast("我的算力为0才可以参加领取空投活动！");
         return;
       }
-      const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.airdrop({gasPrice: ethers.utils.parseUnits("1.0001", "gwei")})
-      );
-      if (gasLimit === 0) {
-        return;
-      }
       let [error, res] = await this.to(
         this.contract.airdrop({
-          gasLimit,
+          gasLimit:"100000",
           gasPrice: ethers.utils.parseUnits("1.0001", "gwei"),
         })
       );
