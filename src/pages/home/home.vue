@@ -275,7 +275,7 @@
             <span class="tit">转账手续费销毁功能</span>
             <br />
             <span class="lv first">v1</span>
-            <span class="tit">50%</span>
+            <span class="tit">20%</span>
             <span class="lv">v2</span>
             <span class="tit">10%</span>
             <span class="lv">v3</span>
