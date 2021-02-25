@@ -417,26 +417,26 @@ contract burn_token_v2 is SafeMath{
         HQKIToken = token;
     }
 
-    //设置一个值，如果用户的qki余额小于这个值，而且算力小于500，不能挖矿
+    //设置一个值，如果用户的hqki余额小于这个值，而且算力小于500，不能挖矿，限制刷子
     function setRequireHqki(uint _value) public{
         require(msg.sender == owner);
         requireHQKI = _value;
     }
     
 
-    //设置一个值，如果用户的token余额小于这个值，而且算力小于500，不能挖矿
+    //设置一个值，如果用户的token余额小于这个值，而且算力小于500，不能挖矿，限制刷子
     function set_anti_bot(uint _value) public{
         require(msg.sender == owner);
         anti_bot = _value;
     }
     
-    //设置质押的token
+    //设置质押的token，后面可能会换成husd
     function set_require_token(address token) public{
         require(msg.sender == owner);
         requireToken = token;
     }
 
-    //设置一个值，如果用户调用gasprice小于这个值，就提交失败
+    //设置一个值，如果用户调用gasprice小于这个值，就提交失败，限制刷子
     function set_min_gasprice(uint _value) public{
         require(msg.sender == owner);
         min_gasprice = _value;
@@ -501,7 +501,7 @@ contract burn_token_v2 is SafeMath{
             miner_days = 1;
         }
 
-        //v2及以上可以5天 v1只能每天领
+        //v2及以上可以7天 v1只能每天领
         if(miner_days > 1 && power[msg.sender] < 500 * 1e3)
         {
             miner_days = 1;
