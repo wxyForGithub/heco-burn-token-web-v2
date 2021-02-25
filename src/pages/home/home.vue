@@ -116,7 +116,7 @@
       <div class="line" v-if="receiveTimestamp != 0">
         上次领取奖励：{{ receiveTime }}
       </div>
-      <div class="my-box airdrop-box" v-if="show_airdrop || show_upgrade">
+      <div class="my-box airdrop-box" v-if="show_airdrop">
         <div class="top space-between">
           <div class="align-center">
             <img
@@ -135,6 +135,24 @@
           <div class="flex-box round" @click="getAirdrop" v-if="show_airdrop">
             领取空投
           </div>
+        </div>
+      </div>
+      <div class="my-box airdrop-box" v-if="show_upgrade">
+        <div class="top space-between">
+          <div class="align-center">
+            <img
+              :src="require('../../assets/' + assetUrl + 'gift.png')"
+              class="img"
+              mode
+            />
+            <div class="text">领取空投</div>
+          </div>
+        </div>
+        <div class="copy copy1 space-between">
+          <div class="flex_v_start flex1">
+            <div class="num">老合约算力</div>
+            <div class="blue_num">{{this.oldPower}}</div>
+          </div>
           <div
             class="flex-box round"
             style="background-color: #ff712a; margin-left: 10px"
@@ -151,6 +169,7 @@
         </div>
       </div>
       <div class="my-box pleage-box" v-if="level < 2 || usdtBalanceOf > 0 || hqikBalanceOf > 0">
+        
         <div class="copy space-between">
           <div class="flex_v_start flex1">
             <div class="num">HQKI质押数量</div>
@@ -184,7 +203,7 @@
         <div style="color: red; margin-top: 10px; font-size: 12px">
           温馨提示: 需要同时最少质押{{ minHqki }}个HQKI和{{
             minUsdt
-          }}个USDT才可以参与挖矿
+          }}个USDT才可以参与挖矿,随着HBT价格上升，会提高质押门槛。
         </div>
       </div>
       <div class="my-box">
@@ -258,6 +277,19 @@
           </div>
         </div>
       </div>
+
+      <div class="my-box tele-box">
+        <div class="copy copy1 space-between">
+          <div class="flex1 flex_h">
+            <img :src="require('../../assets/telegram.png')" alt="" />
+            <div class="flex_v_start">
+              <div class="black30">Telegram</div>
+              <div class="grey30">HBT官方中文群</div>
+            </div>
+          </div>
+          <div class="tele_btn" @click="joinTele">立即加入</div>
+        </div>
+      </div>
     </div>
     <div class="bg" v-show="lvShow">
       <div class="flex-box">
@@ -274,7 +306,7 @@
             <span class="tit">转账手续费销毁功能</span>
             <br />
             <span class="lv first">v1</span>
-            <span class="tit">50%</span>
+            <span class="tit">20%</span>
             <span class="lv">v2</span>
             <span class="tit">10%</span>
             <span class="lv">v3</span>
@@ -308,7 +340,7 @@
           <div class="text1 alignLeft">
             可用余额
             <span>{{ balance }}</span
-            >burn
+            >HBT
           </div>
           <div class="input-box space-between">
             <input
@@ -319,7 +351,7 @@
               v-model="amount"
             />
             <div class="align-center">
-              <div class="text2">burn</div>
+              <div class="text2">HBT</div>
               <div class="line"></div>
               <div class="text3" @click="inputAll">全部</div>
             </div>
@@ -368,7 +400,7 @@
           </div>
           <div class="text5" v-if="receiveAble">
             <span class="hugeMainTxt">{{ expectAmount }}</span>
-            <br />burn
+            <br />HBT
           </div>
           <div class="time-box" v-else>
             <div class="time" v-for="(item, index) in hour" :key="'1_' + index">
@@ -1107,11 +1139,12 @@ export default {
       // 计算阶段奖励
       let currRate = "0.001";
       if (this.level == 1) {
-        if (this.coinBalanceOf < 1) {
-          currRate = "0.001";
-        } else {
-          currRate = RATE[this.level - 1];
-        }
+        // if (this.coinBalanceOf < 1) {
+        //   currRate = "0.001";
+        // } else {
+        //   currRate = RATE[this.level - 1];
+        // }
+        currRate = RATE[this.level - 1];
       } else {
         currRate = RATE[this.level - 1];
       }
@@ -1127,8 +1160,8 @@ export default {
             day = 1;
           }
         } else {
-          if (day > 5) {
-            day = 5;
+          if (day > 7) {
+            day = 7;
           }
         }
       }
@@ -1196,6 +1229,12 @@ export default {
     },
     tab(num) {
       this.active = num;
+    },
+    joinTele() {
+      this.h5Copy("https://t.me/HecoBT");
+      setTimeout(() => {
+        window.location.href = "https://t.me/HecoBT";
+      }, 1000);
     },
   },
   // computed: {
@@ -1436,6 +1475,28 @@ export default {
             border-radius: 30px;
           }
         }
+      }
+    }
+    &.tele-box {
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+      }
+      .black30 {
+        color: #333;
+        font-size: 28px;
+      }
+      .grey30 {
+        color: #737278;
+        font-size: 28px;
+      }
+      .tele_btn {
+        background-color: rgb(42, 161, 213);
+        color: #fff;
+        font-size: 30px;
+        border-radius: 10px;
+        padding: 15px 30px;
       }
     }
     .img {
@@ -1786,89 +1847,4 @@ export default {
     margin-right: 15px;
   }
 }
-// .theme-heco{
-//   .head {
-//     background: url(../../assets/heco/bj.png) no-repeat;
-//     .my {
-//       .right {
-//         .align-center {
-//           .text {
-//             color: #fff;
-//           }
-//         }
-//       }
-//     }
-//     .money {
-//       .item {
-//         .text {
-//           color: #fff;
-//         }
-//       }
-//     }
-//   }
-//   .cont{
-//     .my-box {
-//       .text {
-//         color:#001D52;
-//       }
-//       .text1 {
-//         font-size: 24px;
-//         color: #7d7d82;
-//       }
-//       .text2 {
-//         color: #b09b99;
-//       }
-//       .copy {
-//         background: #DFE7FF;
-//         &.copy1 {
-//           height: 102px;
-//           background: #f3f3f3;
-//           padding: 0 33px 0 40px;
-//         }
-
-//         .flex-box {
-//           background: #536689;
-//         }
-
-//         .num {
-//           color: #001D52;
-//         }
-//       }
-//     }
-//   }
-//   .bg {
-//     .flex-box {
-//       .box {
-//         .text1 {
-//           .lv {
-//             color: #1C6DF1;
-//           }
-//         }
-//         .btn {
-//           background: #1C6DF1;
-//         }
-//       }
-//       .box1 {
-//         .text1 {
-//           span {
-//             color:#6F81A8;
-//           }
-//         }
-//         .text3 {
-//           color: #092559;
-//         }
-//         .tit {
-//           color: #001D52;
-//         }
-//         .btn {
-//           background: #1C6DF1;
-//         }
-//       }
-//     }
-//   }
-//   .hy {
-//     background: linear-gradient(135deg, #005AFF 0%, #337CE4 100%);
-//   }
-
-// }
 </style>
