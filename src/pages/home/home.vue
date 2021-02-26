@@ -1160,7 +1160,7 @@ export default {
     // 十六进制转10进制
     hex2int(hex) {
       if (hex.indexOf("0x") >= 0) {
-        hex = hex.substring("4");
+        hex = hex.substring("2");
       }
       var len = hex.length,
         a = new Array(len),
@@ -1181,7 +1181,7 @@ export default {
     },
     // response公共处理方法
     doResponse(error, res, keyName, Decimal = 0) {
-      // console.log(keyName + "================", error, res);
+      console.log(keyName + "================", error, res);
       if (error == null) {
         if (keyName) {
           let hex = ethers.utils.hexValue(res);
