@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 let axios = Axios.create({
-  baseURL: 'http://qkpay.siru.com/api/',
+  baseURL: process.env.VUE_APP_API_CONFIG,
   timeout: 1000 * 12
 });
 

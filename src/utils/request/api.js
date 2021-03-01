@@ -1,9 +1,7 @@
-import { get, post } from './http'
+import { get } from './http'
 
-// 领取列表
-export const listApi = (params) => get('/airdrop/logs?page='+params.page+'&device='+params.deviceCode+'&is_invite='+params.type);
-// 领取空投
-export const receiveApi = (params) => post('/airdrop/receive', params);
+// 获取气价
+export const gasPriceApi = () => get('/price/prediction');
 
 
 // eg:::
