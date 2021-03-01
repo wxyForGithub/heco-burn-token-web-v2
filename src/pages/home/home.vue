@@ -868,15 +868,9 @@ export default {
       }
       let burn_amount =
         ethers.FixedNumber.from(this.amount.toString()) * 10 ** this.decimals;
-      const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.burn(burn_amount,{gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
-      );
-      if (gasLimit === 0) {
-        return;
-      }
       let [error, res] = await this.to(
         this.contract.burn(burn_amount, {
-          gasLimit,
+          gasLimit:"150000",
           gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
@@ -893,15 +887,9 @@ export default {
         Toast("您今天已经领取过收益了,明天再来！");
         return;
       }
-      const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.mint({gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")})
-      );
-      if (gasLimit === 0) {
-        return;
-      }
       let [error, res] = await this.to(
         this.contract.mint({
-          gasLimit,
+          gasLimit:"150000",
           gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
         })
       );
@@ -1202,7 +1190,7 @@ export default {
     },
     // response公共处理方法
     doResponse(error, res, keyName, Decimal = 0) {
-      // console.log(keyName + "================", error, res);
+      console.log(keyName + "================", error, res);
       if (error == null) {
         if (keyName) {
           let hex = ethers.utils.hexValue(res);
