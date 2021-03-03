@@ -21,7 +21,9 @@
             累计邀请收益 {{ rewardCount }}
           </div>
         </div>
+        <div class="goinSwap"><a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">去交易</a></div>
       </div>
+      
       <div class="money space-between">
         <div class="item">
           <div class="align-center">
@@ -1313,6 +1315,7 @@ export default {
   box-sizing: border-box;
   .my {
     margin-left: 101px;
+    position: relative;
 
     .huo {
       width: 93px;
@@ -1843,5 +1846,15 @@ export default {
     display: block;
     margin-right: 15px;
   }
+}
+.goinSwap{
+  background-color: #fff;
+  font-size: 12px;
+  border-radius: 30px;
+  color: #333;
+  position: absolute;
+  right: 30px;
+  padding: 10px 30px;
+  // justify-content: space-between;
 }
 </style>
