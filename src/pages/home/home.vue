@@ -202,6 +202,15 @@
             </div>
           </div>
         </div>
+        <div class="item" style="margin-top: 10px;">
+          <div class="align-center">
+            <div class="text">全网USDT总质押量: <span style="color:red">{{ totalUsdtAmount }}</span>USDT</div>
+          </div>
+          <div class="align-center">
+            <div class="text">全网HQKI总质押量: <span style="color:red">{{totalHqkiAmount }}</span>HQKI</div>
+          </div>
+          <!-- <div class="num" style="color: red; margin-top: 10px; font-size: 12px"></div> -->
+        </div>
         <div style="color: red; margin-top: 10px; font-size: 12px">
           温馨提示: 需要同时最少质押{{ minHqki }}个HQKI和{{
             minUsdt
@@ -623,6 +632,8 @@ export default {
       min_gasprice: 1.1,
       usdtBalanceOf: 0,
       hqikBalanceOf: 0,
+      totalUsdtAmount: 0,
+      totalHqkiAmount: 0,
     };
   },
   async created() {
@@ -694,6 +705,11 @@ export default {
         }
         let [error1_4, token1Min] = await this.to(this.contract.requireHQKI());
         this.doResponse(error1_4, token1Min, "minHqki", this.hqkiDecimals);
+        
+        let [, hqkiBalance] = await this.to(
+          token1Contract.balanceOf(this.contractAddress)
+        );
+        this.doResponse(error, hqkiBalance, 'totalHqkiAmount', this.hqkiDecimals);
       }
 
       // 获取token2
@@ -712,6 +728,11 @@ export default {
         }
         let [error2_4, token2Min] = await this.to(this.contract.anti_bot());
         this.doResponse(error2_4, token2Min, "minUsdt", this.usdtDecimals);
+
+        let [, usdtBalance] = await this.to(
+          token2Contract.balanceOf(this.contractAddress)
+        );
+        this.doResponse(error, usdtBalance, 'totalUsdtAmount', this.usdtDecimals);
       }
 
       // 获取是否可以进行挖矿
