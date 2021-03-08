@@ -9,7 +9,7 @@
         />
         <div class="right">
           <div class="align-center">
-            <div class="text">我的算力</div>
+            <div class="text" style="color: #fff">我的算力</div>
             <img
               :src="require('../../assets/lv' + level + '.png')"
               class="lv"
@@ -17,11 +17,11 @@
             />
           </div>
           <div class="num alignLeft">{{ power }}</div>
-          <div class="smallMainInserveTxt alignLeft">
+          <div class="smallMainInserveTxt alignLeft" style="font-size: 10px">
             累计邀请收益 {{ rewardCount }}
           </div>
         </div>
-        <div class="goinSwap"><a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">去交易</a></div>
+        <!-- <div class="goinSwap"><a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">去交易</a></div> -->
       </div>
       
       <div class="money space-between">
@@ -48,6 +48,30 @@
           <div class="num">{{ totalSupply }}</div>
         </div>
       </div>
+      <div class="link_box flex_h">
+        <div class="item">
+          <div class="align-center">
+            <a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">
+            <img
+              :src="require('../../assets/' + assetUrl + 'qkswap.png')"
+              class="img"
+              mode
+            />
+            </a>
+          </div>
+        </div>
+        <div class="item">
+          <div class="align-center">
+            <a href="https://burnbt.io/#/home">
+              <img
+                :src="require('../../assets/' + assetUrl + 'bt.png')"
+                class="img1"
+                mode
+              />
+            </a>
+          </div>
+        </div>
+      </div>
       <div class="hy">
         <div class="text alignLeft">燃烧挖矿合约</div>
         <div class="space-between">
@@ -62,25 +86,6 @@
       </div>
     </div>
     <div class="cont">
-      <!-- <div class="my-box pleage-box" v-if="level < 2 || coinBalanceOf > 0">
-        <div class="copy copy1 space-between">
-          <div class="flex_v_start flex1">
-            <div class="num">当前质押数量</div>
-            <div class="blue_num">{{ coinBalanceOf }}</div>
-          </div>
-          <div
-            class="flex-box"
-            style="background-color: #f6884f"
-            @click="pledgeShow = true"
-            v-if="level < 2"
-          >
-            质押HT
-          </div>
-          <div class="flex-box" @click="openPledgeOut" v-if="coinBalanceOf > 0">
-            取出HT
-          </div>
-        </div>
-      </div> -->
       <div class="tab space-between">
         <div class="item" @click="showBurnFlag = true">
           <img
@@ -1328,7 +1333,7 @@ export default {
 }
 .head {
   width: 100%;
-  height: 500px;
+  height: 633px;
   background: url(../../assets/bj.png) no-repeat;
   background-size: 100% 100%;
   padding-top: 100px;
@@ -1348,7 +1353,7 @@ export default {
       margin-top: -10px;
 
       .num {
-        font-size: 58px;
+        font-size: 48px;
         color: #fff;
         font-weight: bold;
       }
@@ -1363,7 +1368,6 @@ export default {
         .text {
           font-size: 26px;
           color: #ffcdcd;
-          margin-left: 11px;
         }
       }
     }
@@ -1401,12 +1405,25 @@ export default {
     }
   }
 
+  .link_box {
+    padding: 30px 110px;
+    .img {
+        width: 154px;
+        height: 50px;
+        margin-right: 30px;
+      }
+      .img1 {
+        width: 213px;
+        height: 50px;
+      }
+  }
+
   .hy {
     // margin-left: 50px;
     // margin-right: 50px;
     // width: 653px;
     height: 112px;
-    background: linear-gradient(135deg, #ffc308 0%, #f6874f 100%);
+    background: #DC5242;
     border-radius: 30px;
     margin: 40px 50px 0 50px;
     padding: 23px 45px 0 50px;
