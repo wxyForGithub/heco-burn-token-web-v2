@@ -1027,7 +1027,7 @@ export default {
       if (distance <= 0) {
         this.pledgeOutShow = true;
       } else {
-        Toast("取出HT需要在上次挖矿后24小时!");
+        Toast("取出质押需要在上次挖矿后24小时!");
       }
     },
     // 获取质押数量
