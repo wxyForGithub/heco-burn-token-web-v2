@@ -306,6 +306,14 @@
           <div class="tele_btn" @click="joinTele">立即加入</div>
         </div>
       </div>
+
+      <div class="flex_h_center_center base_footer">
+        <img
+          :src="require('../../assets/' + assetUrl + 'head.png')"
+          mode
+        />
+        基于burn token开发
+      </div>
     </div>
     <div class="bg" v-show="lvShow">
       <div class="flex-box">
@@ -1894,5 +1902,17 @@ export default {
   right: 30px;
   padding: 10px 30px;
   // justify-content: space-between;
+}
+.base_footer {
+  text-align: center;
+  font-size: 22px;
+  color: #c0c0c0;
+  font-weight: 500;
+  margin-top: 50px;
+  img{
+    width: 28px;
+    height: 32px;
+    margin-right: 8px;
+  }
 }
 </style>
