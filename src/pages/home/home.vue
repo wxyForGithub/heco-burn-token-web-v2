@@ -1,6 +1,30 @@
 <template>
   <div :class="['container']">
     <div class="head">
+      <div class="link_box flex_v_end">
+        <div class="item">
+          <div class="align-center">
+            <a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">
+            <img
+              :src="require('../../assets/' + assetUrl + 'qkswap.png')"
+              class="img"
+              mode
+            />
+            </a>
+          </div>
+        </div>
+        <!-- <div class="item">
+          <div class="align-center">
+            <a href="https://burnbt.io/#/home">
+              <img
+                :src="require('../../assets/' + assetUrl + 'bt.png')"
+                class="img1"
+                mode
+              />
+            </a>
+          </div>
+        </div> -->
+      </div>
       <div class="my flex">
         <img
           :src="require('../../assets/' + assetUrl + 'head.png')"
@@ -48,7 +72,7 @@
           <div class="num">{{ totalSupply }}</div>
         </div>
       </div>
-      <div class="link_box flex_h">
+      <!-- <div class="link_box flex_h">
         <div class="item">
           <div class="align-center">
             <a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">
@@ -71,7 +95,7 @@
             </a>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="hy">
         <div class="text alignLeft">燃烧挖矿合约</div>
         <div class="space-between">
@@ -312,7 +336,7 @@
           :src="require('../../assets/' + assetUrl + 'head.png')"
           mode
         />
-        基于burn token开发
+        基于 <a href="https://burnbt.io/#/home"> burn token</a>开发
       </div>
     </div>
     <div class="bg" v-show="lvShow">
@@ -1414,11 +1438,10 @@ export default {
   }
 
   .link_box {
-    padding: 30px 110px;
+    padding: 30px 50px;
     .img {
         width: 154px;
         height: 50px;
-        margin-right: 30px;
       }
       .img1 {
         width: 213px;
@@ -1913,6 +1936,10 @@ export default {
     width: 28px;
     height: 32px;
     margin-right: 8px;
+  }
+  a{
+    color: #FE440E;
+    text-decoration: underline;
   }
 }
 </style>
