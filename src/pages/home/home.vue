@@ -331,6 +331,19 @@
         </div>
       </div>
 
+      <div class="my-box tele-box">
+        <div class="copy copy1 space-between">
+          <div class="flex1 flex_h">
+            <img :src="require('../../assets/QQ.png')" alt="" />
+            <div class="flex_v_start">
+              <div class="black30">839435618</div>
+              <div class="grey30">HBT大家庭（QQ）</div>
+            </div>
+          </div>
+          <div class="tele_btn" @click="joinQQ">立即加入</div>
+        </div>
+      </div>
+
       <div class="flex_h_center_center base_footer">
         <img
           :src="require('../../assets/' + assetUrl + 'head.png')"
@@ -1291,6 +1304,12 @@ export default {
       this.h5Copy("https://t.me/HecoBT");
       setTimeout(() => {
         window.location.href = "https://t.me/HecoBT";
+      }, 1000);
+    },
+    joinQQ() {
+      this.h5Copy("839435618");
+      setTimeout(() => {
+      window.location.href = "tencent://message/?uin=10987654321";
       }, 1000);
     },
   },
