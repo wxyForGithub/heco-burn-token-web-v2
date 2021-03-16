@@ -200,7 +200,6 @@
         </div>
       </div>
       <div class="my-box pleage-box" v-if="level < 2 || usdtBalanceOf > 0 || hqikBalanceOf > 0">
-        
         <div class="copy space-between">
           <div class="flex_v_start flex1">
             <div class="num">HQKI质押数量</div>
@@ -1138,7 +1137,6 @@ export default {
         Toast('权限申请中...');
         this.pledgeShow = false;
         this.plageName = "";
-        this.amount = "";
         await this.queryTransation(hash.hash, null, async () => {
           const gasLimit2 = await this.getEstimateGas(() =>
             this.contract.estimateGas.depositToken(tokenAddr, amount)
@@ -1153,6 +1151,7 @@ export default {
             })
           );
           if (this.doResponse(error, res)) {
+            this.amount = "";
             Toast("提交请求成功，等待区块确认");
             await this.queryTransation(res.hash);
           }
@@ -1161,7 +1160,7 @@ export default {
         Toast('质押中...');
         this.pledgeShow = false;
         this.plageName = "";
-        this.amount = "";
+        
         const gasLimit2 = await this.getEstimateGas(() =>
           this.contract.estimateGas.depositToken(tokenAddr, amount)  
         );
@@ -1175,6 +1174,7 @@ export default {
           })
         );
         if (this.doResponse(error, res)) {
+          this.amount = "";
           Toast("提交请求成功，等待区块确认");
           await this.queryTransation(res.hash);
         }
