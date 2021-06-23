@@ -734,12 +734,12 @@ export default {
       let [error, minGasprice] = await this.to(gasPriceApi());
       if(this.doResponse(error, minGasprice)){
         if(minGasprice.code === 0) {
-          this.min_gasprice = Number(minGasprice.prices && minGasprice.prices.median || 1) + 0.1
+          this.min_gasprice = Number(minGasprice.prices && minGasprice.prices.median || 1) + 0.5
         } else {
-          this.min_gasprice = 1.1
+          this.min_gasprice = 1.5
         }
       } else {
-        this.min_gasprice = 1.1
+        this.min_gasprice = 1.5
       }
 
       // 获取token1
