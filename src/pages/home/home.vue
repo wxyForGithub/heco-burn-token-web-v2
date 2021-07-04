@@ -351,7 +351,7 @@
           :src="require('../../assets/' + assetUrl + 'head.png')"
           mode
         />
-        基于 <a href="https://burnbt.io/#/home"> burn token</a>开发
+        推荐使用 <a href="https://h5.owncoin.io/#/download">owncoin </a> 钱包
       </div>
     </div>
     <div class="bg" v-show="lvShow">
@@ -734,7 +734,7 @@ export default {
       let [error, minGasprice] = await this.to(gasPriceApi());
       if(this.doResponse(error, minGasprice)){
         if(minGasprice.code === 0) {
-          this.min_gasprice = Number(minGasprice.prices && minGasprice.prices.median || 1) + 0.5
+          this.min_gasprice = Number(minGasprice.prices && minGasprice.prices.fast || 1)
         } else {
           this.min_gasprice = 1.5
         }
