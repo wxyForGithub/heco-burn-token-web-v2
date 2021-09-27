@@ -202,52 +202,7 @@
           </div>
         </div>
       </div>
-      <div class="my-box pleage-box" v-if="level < 2 || usdtBalanceOf > 0 || hqikBalanceOf > 0">
-        <div class="copy space-between">
-          <div class="flex_v_start flex1">
-            <div class="num">HQKI质押数量</div>
-            <div class="blue_num">{{ hqikBalanceOf }}</div>
-            <div class="flex-box round" @click="pledgeShow = true">
-              <img
-                :src="require('../../assets/' + assetUrl + 'up.png')"
-                class="up_img"
-                mode
-              />
-              质押
-            </div>
-          </div>
-          <div class="flex_v_start flex1">
-            <div class="num">USDT质押数量</div>
-            <div class="blue_num">{{ usdtBalanceOf }}</div>
-            <div
-              class="flex-box round"
-              style="background-color: #585858"
-              @click="openPledgeOut"
-            >
-              <img
-                :src="require('../../assets/' + assetUrl + 'down.png')"
-                class="down_img"
-                mode
-              />
-              取出
-            </div>
-          </div>
-        </div>
-        <div class="item" style="margin-top: 10px;">
-          <div class="align-center">
-            <div class="text">全网USDT总质押量: <span style="color:red">{{ totalUsdtAmount }}</span>USDT</div>
-          </div>
-          <div class="align-center">
-            <div class="text">全网HQKI总质押量: <span style="color:red">{{totalHqkiAmount }}</span>HQKI</div>
-          </div>
-          <!-- <div class="num" style="color: red; margin-top: 10px; font-size: 12px"></div> -->
-        </div>
-        <div style="color: red; margin-top: 10px; font-size: 12px">
-          温馨提示: 需要同时最少质押{{ minHqki }}个HQKI和{{
-            minUsdt
-          }}个USDT才可以参与挖矿,随着HBT价格上升，会提高质押门槛。
-        </div>
-      </div>
+
       <div class="my-box">
         <div class="top space-between">
           <div class="align-center">
@@ -483,119 +438,7 @@
         </div>
       </div>
     </div>
-    <!-- 取出质押 -->
-    <div class="bg" v-show="pledgeOutShow">
-      <div class="flex-box">
-        <div class="box1">
-          <div class="align-center">
-            <div class="text">取出资产</div>
-          </div>
-          <div class="flex_h">
-            <div
-              :class="[
-                'flex-box',
-                plageName == 'USDT' ? 'fill-btn' : 'border-btn',
-              ]"
-              style="margin-left: 0"
-              @click="plageName = 'USDT'"
-            >
-              USDT
-            </div>
-            <div
-              :class="[
-                'flex-box',
-                plageName == 'HQKI' ? 'fill-btn' : 'border-btn',
-              ]"
-              @click="plageName = 'HQKI'"
-            >
-              HQKI
-            </div>
-          </div>
-          <div class="text1 alignLeft">
-            可取出数量
-            <span
-              >{{ plageName == "USDT" ? usdtBalanceOf : hqikBalanceOf }} </span
-            >{{ plageName }}
-          </div>
 
-          <div class="input-box space-between">
-            <input
-              type="text"
-              class="input"
-              value
-              placeholder="输入取出数量"
-              v-model="amount"
-            />
-            <div class="align-center">
-              <div class="text2">{{ plageName }}</div>
-              <div class="line"></div>
-              <div
-                class="text3"
-                @click="
-                  amount = plageName == 'USDT' ? usdtBalanceOf : hqikBalanceOf
-                "
-              >
-                全部
-              </div>
-            </div>
-          </div>
-          <div class="tit">* 取出资产需要在上次挖矿后24小时</div>
-          <div class="flex-box btn" @click="withDraw">确定取出</div>
-          <div class="text4" @click="pledgeOutShow = false">取消</div>
-        </div>
-      </div>
-    </div>
-    <!-- 质押 -->
-    <div class="bg" v-show="pledgeShow">
-      <div class="flex-box">
-        <div class="box1">
-          <div class="align-center">
-            <div class="text">质押资产</div>
-          </div>
-          <div class="text1 alignLeft">
-            等级小于V1的用户最少质押{{ minUsdt }}的USDT和{{
-              minHqki
-            }}数量的HQKI才可进行挖矿
-          </div>
-          <div class="flex_h">
-            <div
-              :class="[
-                'flex-box',
-                plageName == 'USDT' ? 'fill-btn' : 'border-btn',
-              ]"
-              style="margin-left: 0"
-              @click="plageName = 'USDT'"
-            >
-              USDT
-            </div>
-            <div
-              :class="[
-                'flex-box',
-                plageName == 'HQKI' ? 'fill-btn' : 'border-btn',
-              ]"
-              @click="plageName = 'HQKI'"
-            >
-              HQKI
-            </div>
-          </div>
-          <div class="input-box space-between">
-            <input
-              type="text"
-              class="input"
-              value
-              placeholder="输入质押数量"
-              v-model="amount"
-            />
-            <div class="align-center">
-              <div class="line"></div>
-              <div class="text2">{{ plageName }}</div>
-            </div>
-          </div>
-          <div class="flex-box btn" @click="handlePlege">确定质押</div>
-          <div class="text4" @click="pledgeShow = false">取消</div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -658,10 +501,6 @@ export default {
       usdtDecimals: 18,
       hqkiSymbol: "",
       usdtSymbol: "",
-      pledgeUsdtAmount: 0, // 质押usdt的数量
-      pledgeHqkiAmount: 0, // 质押hqki的数量
-      usdtContractAddress: "0xa71EdC38d189767582C38A3145b5873052c3e47a",
-      hqkiContractAddress: "0x164F31A5bfA746bcc55bd2279A400B645E99aaeB",
       plageName: "",
       min_gasprice: 1.1,
       usdtBalanceOf: 0,
@@ -701,7 +540,6 @@ export default {
       }
     }
     await this.initContract();
-    this.getPledgeAmount();
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
@@ -722,53 +560,7 @@ export default {
       } else {
         this.min_gasprice = 1.5
       }
-
-      // 获取token1
-      let [error1, token1] = await this.to(this.contract.HQKIToken());
-      if (this.doResponse(error1, token1)) {
-        const token1Contract = new ethers.Contract(token1, abi, this.signer);
-        let [error1_2, token1Decimals] = await this.to(
-          token1Contract.decimals()
-        );
-        if (this.doResponse(error1_2, token1Decimals)) {
-          this.hqkiDecimals = token1Decimals;
-        }
-        let [error1_3, token1Symbol] = await this.to(token1Contract.symbol());
-        if (this.doResponse(error1_3, token1Symbol)) {
-          this.hqkiSymbol = token1Symbol;
-        }
-        let [error1_4, token1Min] = await this.to(this.contract.requireHQKI());
-        this.doResponse(error1_4, token1Min, "minHqki", this.hqkiDecimals);
-        
-        let [, hqkiBalance] = await this.to(
-          token1Contract.balanceOf(this.contractAddress)
-        );
-        this.doResponse(error, hqkiBalance, 'totalHqkiAmount', this.hqkiDecimals);
-      }
-
-      // 获取token2
-      let [error2, token2] = await this.to(this.contract.requireToken());
-      if (this.doResponse(error2, token2)) {
-        const token2Contract = new ethers.Contract(token2, abi, this.signer);
-        let [error2_2, token2Decimals] = await this.to(
-          token2Contract.decimals()
-        );
-        if (this.doResponse(error2_2, token2Decimals)) {
-          this.usdtDecimals = token2Decimals;
-        }
-        let [error2_3, token2Symbol] = await this.to(token2Contract.symbol());
-        if (this.doResponse(error2_3, token2Symbol)) {
-          this.usdtSymbol = token2Symbol;
-        }
-        let [error2_4, token2Min] = await this.to(this.contract.anti_bot());
-        this.doResponse(error2_4, token2Min, "minUsdt", this.usdtDecimals);
-
-        let [, usdtBalance] = await this.to(
-          token2Contract.balanceOf(this.contractAddress)
-        );
-        this.doResponse(error, usdtBalance, 'totalUsdtAmount', this.usdtDecimals);
-      }
-
+      
       // 获取是否可以进行挖矿
       let [error3, res1] = await this.to(this.contract.is_mint());
       if (this.doResponse(error3, res1)) {
@@ -1029,163 +821,6 @@ export default {
         Toast("升级成功！");
         await this.queryTransation(res.hash);
       }
-    },
-    openPledgeOut() {
-      let nowTimeStr = Date.now().toString().substring(0, 10);
-      // 如果distance大于0表示收益还不可以领取。需要计算倒计时
-      let distance = this.receiveTimestamp + 86400 - Number(nowTimeStr);
-      if (distance <= 0) {
-        this.pledgeOutShow = true;
-      } else {
-        Toast("取出质押需要在上次挖矿后24小时!");
-      }
-    },
-    // 获取质押数量
-    async getPledgeAmount() {
-      let [erro1, Token1balance] = await this.to(
-        this.contract.TokenBalanceOf(this.myAddress, this.usdtContractAddress)
-      );
-      this.doResponse(erro1, Token1balance, "usdtBalanceOf", this.usdtDecimals);
-      let [error2, Token1balance2] = await this.to(
-        this.contract.TokenBalanceOf(this.myAddress, this.hqkiContractAddress)
-      );
-      this.doResponse(
-        error2,
-        Token1balance2,
-        "hqikBalanceOf",
-        this.hqkiDecimals
-      );
-      console.log(this.hqikBalanceOf, this.usdtBalanceOf, erro1, Token1balance, error2, Token1balance2)
-    },
-    // 取出质押
-    async withDraw() {
-      if (this.plageName === "") {
-        Toast("请先选择质押的资产类型");
-        return;
-      }
-      if (this.amount == "") {
-        Toast("请输入您的取出质押数量");
-        return;
-      }
-      let amount = ethers.utils.parseEther(this.amount.toString());
-      let tokenAddr =
-        this.plageName === "USDT"
-          ? this.usdtContractAddress
-          : this.hqkiContractAddress;
-      const gasLimit = await this.getEstimateGas(() =>
-        this.contract.estimateGas.withdrawToken(tokenAddr, amount,{
-        gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")
-      })
-      );
-      if (gasLimit === 0) {
-        return;
-      }
-      let [error, res] = await this.to(
-        this.contract.withdrawToken(tokenAddr, amount, {
-          gasLimit,
-          gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
-        })
-      );
-      if (this.doResponse(error, res)) {
-        this.pledgeOutShow = false;
-        this.plageName = "";
-        this.amount = "";
-        Toast("提交请求成功，等待区块确认");
-        await this.queryTransation(res.hash);
-      }
-    },
-    // 质押
-    async handlePlege() {
-      if (this.plageName === "") {
-        Toast("请先选择质押的资产类型");
-        return;
-      }
-      if (this.amount == "") {
-        Toast("请输入您的质押数量");
-        return;
-      }
-      let amount = ethers.utils.parseEther(this.amount.toString());
-      let tokenAddr =
-        this.plageName === "USDT"
-          ? this.usdtContractAddress
-          : this.hqkiContractAddress;
-      let contract = new ethers.Contract(tokenAddr, abi, this.signer);
-      let [err2, allowce] = await this.to(contract.allowance(this.myAddress, this.contract.address))
-      let response = [false,];
-      
-      if(this.doResponse(err2, allowce)) {
-        const hex = ethers.utils.hexValue(allowce)
-        const Value = Decimal.div(this.hex2int(hex), ethers.BigNumber.from(10).pow(this.decimals))
-       
-        if (!(Decimal.sub(Value, amount) >= 0)) {
-          const gasLimit1 = await this.getEstimateGas(() =>
-            contract.estimateGas.approve(this.contract.address, amount, {
-        gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")
-      })
-          );
-          if (gasLimit1 === 0) {
-            return;
-          }
-          response = await this.to(
-            contract.approve(this.contract.address, '1000000000000000000000000000000000000000000000000000000000000000000000000000', {
-              gasLimit: Number(gasLimit1),
-              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
-            })
-          );
-        }
-      }
-      let [err, hash] = response;
-      if(err == null) {
-        Toast('权限申请中...');
-        this.pledgeShow = false;
-        this.plageName = "";
-        await this.queryTransation(hash.hash, null, async () => {
-          const gasLimit2 = await this.getEstimateGas(() =>
-            this.contract.estimateGas.depositToken(tokenAddr, amount, {
-        gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")
-      })
-          );
-          if (gasLimit2 === 0) {
-            return;
-          }
-          let [error, res] = await this.to(
-            this.contract.depositToken(tokenAddr, amount, {
-              gasLimit: Number(gasLimit2),
-              gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
-            })
-          );
-          if (this.doResponse(error, res)) {
-            this.amount = "";
-            Toast("提交请求成功，等待区块确认");
-            await this.queryTransation(res.hash);
-          }
-        });
-      } else {
-        Toast('质押中...');
-        this.pledgeShow = false;
-        this.plageName = "";
-        
-        const gasLimit2 = await this.getEstimateGas(() =>
-          this.contract.estimateGas.depositToken(tokenAddr, amount, {
-        gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei")
-      })  
-        );
-        if (gasLimit2 === 0) {
-          return;
-        }
-        let [error, res] = await this.to(
-          this.contract.depositToken(tokenAddr, amount, {
-            gasLimit: Number(gasLimit2),
-            gasPrice: ethers.utils.parseUnits(String(this.min_gasprice), "gwei"),
-          })
-        );
-        if (this.doResponse(error, res)) {
-          this.amount = "";
-          Toast("提交请求成功，等待区块确认");
-          await this.queryTransation(res.hash);
-        }
-      }
-      
     },
     // 查询Transaction
     async queryTransation(hash, updateTime, callback) {
