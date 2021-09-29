@@ -491,7 +491,7 @@ export default {
       coinBalanceOf: 0,
       is_airdrop: false,
       is_upgrade: false,
-      is_mint: false,
+      is_mint: true,
       show_upgrade: false,
       show_airdrop: false,
       oldPower: 0,
