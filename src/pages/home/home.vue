@@ -448,7 +448,6 @@ import { ethers } from "ethers";
 import { abi } from "./abi";
 import { Toast } from "vant";
 import { GLOBAL_CONFIGS } from "../../utils/global";
-import {gasPriceApi} from '../../utils/request/api';
 // 收益率,为了防止机器刷，LV1级qki余额大于1时，才能够拿到0.2%，否则拿到0.1%
 const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
@@ -502,7 +501,7 @@ export default {
       hqkiSymbol: "",
       usdtSymbol: "",
       plageName: "",
-      min_gasprice: 1.1,
+      min_gasprice: '3',
       usdtBalanceOf: 0,
       hqikBalanceOf: 0,
       totalUsdtAmount: 0,
@@ -550,15 +549,12 @@ export default {
     // 获取合约初始化数据，以后都不会更新的方法，只请求一次
     async initContract() {
       // 获取最小气价
-      let [error, minGasprice] = await this.to(gasPriceApi());
-      if(this.doResponse(error, minGasprice)){
-        if(minGasprice.code === 0) {
-          this.min_gasprice = Number(minGasprice.prices && minGasprice.prices.fast || 1)
-        } else {
-          this.min_gasprice = 1.5
-        }
+      const [error, gasprice] = await this.to(this.signer.getGasPrice())
+      if (error == null) {
+        const gasString = ethers.utils.formatUnits(gasprice.toString(), 'gwei').toString()
+        this.min_gasprice = gasString
       } else {
-        this.min_gasprice = 1.5
+        this.min_gasprice = '3'
       }
       
       // 获取是否可以进行挖矿
@@ -904,7 +900,7 @@ export default {
     },
     // response公共处理方法
     doResponse(error, res, keyName, Decimal = 0) {
-      console.log(keyName + "================", error, res);
+      // console.log(keyName + "================", error, res);
       if (error == null) {
         if (keyName) {
           let hex = ethers.utils.hexValue(res);
@@ -914,12 +910,22 @@ export default {
         }
         return true;
       } else {
-        if (error.code == "INSUFFICIENT_FUNDS") {
-          Toast("矿工费不足");
-        } else if (error.code == 4001) {
-          Toast("用户取消");
+        if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
+          Toast('错误:' + error.error.message)
+        } else if (error.code === 'INSUFFICIENT_FUNDS') {
+          Toast('矿工费不足')
+        } else if (error.code === 4001 || error === 'cancelled') {
+          Toast('交易取消')
         } else {
-          Toast("错误代码:" + error.code);
+          if ((error.data.message || '').indexOf('gas') > 0) {
+            Toast('矿工费不足')
+          } else if ((error.data.message || '').indexOf('RPC') > 0) {
+            Toast('节点异常，请切换节点')
+          } else if ((error.data.message || '').indexOf('reverted') > 0) {
+            Toast('错误:' + error.data.message)
+          } else {
+            Toast('异常')
+          }
         }
         return false;
       }
