@@ -553,7 +553,7 @@ export default {
       let gasprice = gasApiString.data.fast.price
       // 获取最小气价,走节点
       // const [error, gasprice] = await this.to(this.signer.getGasPrice())
-      
+
       if (error == null) {
         const gasString = ethers.utils.formatUnits(gasprice.toString(), 'gwei').toString()
         console.log('gasprice====', gasString)
@@ -561,7 +561,7 @@ export default {
       } else {
         this.min_gasprice = '3'
       }
-      
+
       // 获取是否可以进行挖矿
       let [error3, res1] = await this.to(this.contract.is_mint());
       // console.log('--------------mint', res1)
