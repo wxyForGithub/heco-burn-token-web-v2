@@ -550,16 +550,24 @@ export default {
     // 获取合约初始化数据，以后都不会更新的方法，只请求一次
     async initContract() {
       let [error, gasApiString] =  await this.to(gasPriceApi())
-      let gasprice = gasApiString.data.fast.price
       // 获取最小气价,走节点
       // const [error, gasprice] = await this.to(this.signer.getGasPrice())
 
       if (error == null) {
-        const gasString = ethers.utils.formatUnits(gasprice.toString(), 'gwei').toString()
-        console.log('gasprice====', gasString)
-        this.min_gasprice = gasString
+        if(gasApiString.length > 0) {
+          let gasprice = gasApiString.filter((gas) => gas.level == 'fast')
+          // console.log(gasprice)
+          if(gasprice.length > 0) {
+            const gasString = ethers.utils.formatUnits(gasprice[0].price.toString(), 'gwei').toString()
+            this.min_gasprice = gasString
+          } else {
+            this.min_gasprice = '3.1'
+          }
+        } else {
+          this.min_gasprice = '3.1'
+        }
       } else {
-        this.min_gasprice = '3'
+        this.min_gasprice = '3.1'
       }
 
       // 获取是否可以进行挖矿
