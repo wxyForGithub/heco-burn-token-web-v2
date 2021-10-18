@@ -606,6 +606,7 @@ import { ethers } from "ethers";
 import { abi } from "./abi";
 import { Toast } from "vant";
 import { GLOBAL_CONFIGS } from "../../utils/global";
+import {gasPriceApi} from '../../utils/request/api'
 // 收益率,为了防止机器刷，LV1级qki余额大于1时，才能够拿到0.2%，否则拿到0.1%
 const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
@@ -711,8 +712,10 @@ export default {
     },
     // 获取合约初始化数据，以后都不会更新的方法，只请求一次
     async initContract() {
-      // 获取最小气价
-      const [error, gasprice] = await this.to(this.signer.getGasPrice())
+      let [error, gasApiString] =  await this.to(gasPriceApi())
+      let gasprice = gasApiString.data.fast.price
+      // 获取最小气价,走节点
+      // const [error, gasprice] = await this.to(this.signer.getGasPrice())
       if (error == null) {
         const gasString = ethers.utils.formatUnits(gasprice.toString(), 'gwei').toString()
         this.min_gasprice = gasString
