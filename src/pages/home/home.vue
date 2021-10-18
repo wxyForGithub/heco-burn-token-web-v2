@@ -448,6 +448,7 @@ import { ethers } from "ethers";
 import { abi } from "./abi";
 import { Toast } from "vant";
 import { GLOBAL_CONFIGS } from "../../utils/global";
+import {gasPriceApi} from '../../utils/request/api'
 // 收益率,为了防止机器刷，LV1级qki余额大于1时，才能够拿到0.2%，否则拿到0.1%
 const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
@@ -548,10 +549,14 @@ export default {
     },
     // 获取合约初始化数据，以后都不会更新的方法，只请求一次
     async initContract() {
-      // 获取最小气价
-      const [error, gasprice] = await this.to(this.signer.getGasPrice())
+      let [error, gasApiString] =  await this.to(gasPriceApi())
+      let gasprice = gasApiString.data.fast.price
+      // 获取最小气价,走节点
+      // const [error, gasprice] = await this.to(this.signer.getGasPrice())
+      
       if (error == null) {
         const gasString = ethers.utils.formatUnits(gasprice.toString(), 'gwei').toString()
+        console.log('gasprice====', gasString)
         this.min_gasprice = gasString
       } else {
         this.min_gasprice = '3'
@@ -559,12 +564,14 @@ export default {
       
       // 获取是否可以进行挖矿
       let [error3, res1] = await this.to(this.contract.is_mint());
+      // console.log('--------------mint', res1)
       if (this.doResponse(error3, res1)) {
         this.is_mint = res1;
       }
     },
     // 展示领取收益
     async showIncome() {
+      
       if(!this.is_mint){
         Toast('现在还不能进行挖矿');
         return;
