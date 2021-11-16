@@ -475,6 +475,7 @@ export default {
       usdtSymbol: "",
       plageName: "",
       min_gasprice: 2.25,
+      min_gasprice: '3',
       usdtBalanceOf: 0,
       hqikBalanceOf: 0,
       totalUsdtAmount: 0,
@@ -529,12 +530,14 @@ export default {
 
       // 获取是否可以进行挖矿
       let [error3, res1] = await this.to(this.contract.is_mint());
+      // console.log('--------------mint', res1)
       if (this.doResponse(error3, res1)) {
         this.is_mint = res1;
       }
     },
     // 展示领取收益
     async showIncome() {
+      
       if(!this.is_mint){
         Toast('现在还不能进行挖矿');
         return;
@@ -870,7 +873,7 @@ export default {
     },
     // response公共处理方法
     doResponse(error, res, keyName, Decimal = 0) {
-      console.log(keyName + "================", error, res);
+      // console.log(keyName + "================", error, res);
       if (error == null) {
         if (keyName) {
           let hex = ethers.utils.hexValue(res);
@@ -880,12 +883,22 @@ export default {
         }
         return true;
       } else {
-        if (error.code == "INSUFFICIENT_FUNDS") {
-          Toast("矿工费不足");
-        } else if (error.code == 4001) {
-          Toast("用户取消");
+        if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
+          Toast('错误:' + error.error.message)
+        } else if (error.code === 'INSUFFICIENT_FUNDS') {
+          Toast('矿工费不足')
+        } else if (error.code === 4001 || error === 'cancelled') {
+          Toast('交易取消')
         } else {
-          Toast("错误代码:" + error.code);
+          if ((error.data.message || '').indexOf('gas') > 0) {
+            Toast('矿工费不足')
+          } else if ((error.data.message || '').indexOf('RPC') > 0) {
+            Toast('节点异常，请切换节点')
+          } else if ((error.data.message || '').indexOf('reverted') > 0) {
+            Toast('错误:' + error.data.message)
+          } else {
+            Toast('异常')
+          }
         }
         return false;
       }
