@@ -259,7 +259,7 @@
           :src="require('../../assets/' + assetUrl + 'head.png')"
           mode
         />
-         本项目由夸克区块链团队开发并免费提供给hbt社区使用。
+          <a href="https://app.chaintweet.io/#/othercenter?address=0xbdDF7450c3749f18eb696f12A09C29A577C1f65e">hbt项目进展动态</a>
       </div>
 
     </div>
@@ -474,8 +474,7 @@ export default {
       hqkiSymbol: "",
       usdtSymbol: "",
       plageName: "",
-      min_gasprice: 2.25,
-      min_gasprice: '3',
+      min_gasprice: "2.25",
       usdtBalanceOf: 0,
       hqikBalanceOf: 0,
       totalUsdtAmount: 0,
