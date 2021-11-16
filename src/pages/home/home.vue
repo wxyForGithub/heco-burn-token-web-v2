@@ -2,17 +2,6 @@
   <div :class="['container']">
     <div class="head">
       <div class="link_box flex_v_end">
-        <div class="item">
-          <div class="align-center">
-            <a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">
-            <img
-              :src="require('../../assets/' + assetUrl + 'qkswap.png')"
-              class="img"
-              mode
-            />
-            </a>
-          </div>
-        </div>
         <!-- <div class="item">
           <div class="align-center">
             <a href="https://burnbt.io/#/home">
@@ -45,9 +34,7 @@
             累计邀请收益 {{ rewardCount }}
           </div>
         </div>
-        <!-- <div class="goinSwap"><a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">去交易</a></div> -->
       </div>
-      
       <div class="money space-between">
         <div class="item">
           <div class="align-center">
@@ -72,30 +59,7 @@
           <div class="num">{{ totalSupply }}</div>
         </div>
       </div>
-      <!-- <div class="link_box flex_h">
-        <div class="item">
-          <div class="align-center">
-            <a href="https://heco.qkswap.io/#/swap?tokenA=0xa71edc38d189767582c38a3145b5873052c3e47a&tokenB=0x8400aba4bfd7dff7d277a3de2f98fd32f4bb2d6c&tokenAName=USDT&tokenBName=hbt">
-            <img
-              :src="require('../../assets/' + assetUrl + 'qkswap.png')"
-              class="img"
-              mode
-            />
-            </a>
-          </div>
-        </div>
-        <div class="item">
-          <div class="align-center">
-            <a href="https://burnbt.io/#/home">
-              <img
-                :src="require('../../assets/' + assetUrl + 'bt.png')"
-                class="img1"
-                mode
-              />
-            </a>
-          </div>
-        </div>
-      </div> -->
+
       <div class="hy">
         <div class="text alignLeft">燃烧挖矿合约</div>
         <div class="space-between">
@@ -287,8 +251,17 @@
           :src="require('../../assets/' + assetUrl + 'head.png')"
           mode
         />
-        推荐使用 <a href="https://h5.owncoin.io/#/download">owncoin </a> 钱包
+        hbt社区推荐使用 <a href="https://h5.owncoin.io/#/download">owncoin </a> 钱包，更安全更方便。
       </div>
+
+      <div class="flex_h_center_center base_footer">
+         <img
+          :src="require('../../assets/' + assetUrl + 'head.png')"
+          mode
+        />
+         本项目由夸克区块链团队开发并免费提供给hbt社区使用。
+      </div>
+
     </div>
     <div class="bg" v-show="lvShow">
       <div class="flex-box">
@@ -448,7 +421,6 @@ import { ethers } from "ethers";
 import { abi } from "./abi";
 import { Toast } from "vant";
 import { GLOBAL_CONFIGS } from "../../utils/global";
-import {gasPriceApi} from '../../utils/request/api';
 // 收益率,为了防止机器刷，LV1级qki余额大于1时，才能够拿到0.2%，否则拿到0.1%
 const RATE = ["0.002", "0.005", "0.006", "0.007", "0.008"];
 export default {
@@ -502,7 +474,7 @@ export default {
       hqkiSymbol: "",
       usdtSymbol: "",
       plageName: "",
-      min_gasprice: 1.1,
+      min_gasprice: 2.25,
       usdtBalanceOf: 0,
       hqikBalanceOf: 0,
       totalUsdtAmount: 0,
@@ -550,17 +522,11 @@ export default {
     // 获取合约初始化数据，以后都不会更新的方法，只请求一次
     async initContract() {
       // 获取最小气价
-      let [error, minGasprice] = await this.to(gasPriceApi());
-      if(this.doResponse(error, minGasprice)){
-        if(minGasprice.code === 0) {
-          this.min_gasprice = Number(minGasprice.prices && minGasprice.prices.fast || 1)
-        } else {
-          this.min_gasprice = 1.5
-        }
-      } else {
-        this.min_gasprice = 1.5
-      }
-      
+      let _gasPrice = await this.provider.getGasPrice();
+      _gasPrice = ethers.utils.formatUnits(_gasPrice, "gwei")
+      if (_gasPrice > this.min_gasprice)
+      this.min_gasprice = _gasPrice;//如果网络当前矿工费高于预设最小值，使用当前值
+
       // 获取是否可以进行挖矿
       let [error3, res1] = await this.to(this.contract.is_mint());
       if (this.doResponse(error3, res1)) {
