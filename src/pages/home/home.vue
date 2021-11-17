@@ -411,7 +411,18 @@
         </div>
       </div>
     </div>
-
+    <!-- 广告 -->
+    <div class="bg" v-show="adFlag">
+      <div class="flex-box">
+        <div class="img_box">
+          <img :src="require('../../assets/' + assetUrl + 'popup.png')" alt="" class="ad-poster">
+          <div class="flex_h_center_center close_wrap" @click="adFlag=false">
+            <img :src="require('../../assets/' + assetUrl + 'close.png')" alt="" class="close">
+          </div>
+        </div>
+        
+      </div>
+    </div>
   </div>
 </template>
 
@@ -479,6 +490,7 @@ export default {
       hqikBalanceOf: 0,
       totalUsdtAmount: 0,
       totalHqkiAmount: 0,
+      adFlag: false, // 广告
     };
   },
   async created() {
@@ -512,6 +524,7 @@ export default {
       }
     }
     await this.initContract();
+    this.adFlag = true
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
@@ -1353,7 +1366,24 @@ export default {
         margin-top: 50px;
       }
     }
-
+    .img_box {
+      margin-left: 50px;
+      margin-right: 50px;
+      width: 100%;
+      border-radius: 20px;
+      .ad-poster{
+        width: 100%;
+        object-fit: cover;
+      }
+      .close_wrap{
+        margin-top: 30px;
+        .close{
+          width: 70px;
+          height: 70px;
+        }
+      }
+      
+    }
     .box1 {
       margin-left: 50px;
       margin-right: 50px;
