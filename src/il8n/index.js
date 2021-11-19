@@ -244,7 +244,7 @@ const messages = {
 }
 Vue.use(VueI18n);
 const i18n = new VueI18n({
-  locale: localStorage.getItem('APP_LANG') || 'en', // set locale
+  locale: localStorage.getItem('APP_LANG') || 'zh', // set locale
   silentFallbackWarn: true,
   messages, // set locale messages
 })
