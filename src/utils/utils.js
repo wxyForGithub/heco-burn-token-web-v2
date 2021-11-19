@@ -3,7 +3,7 @@ import {GLOBAL_CONFIGS} from '../utils/global';
 import Big from 'big.js'
 const h5Copy = {
   methods: {
-    h5Copy(content) {
+    h5Copy(content, msg) {
       if (!document.queryCommandSupported('copy')) {
         // 不支持
         return false
@@ -17,7 +17,7 @@ const h5Copy = {
       textarea.setSelectionRange(0, content.length) //核心
       document.execCommand("copy") // 执行浏览器复制命令
       textarea.remove()
-      Toast('复制成功');
+      Toast(msg);
 
     }
   }
