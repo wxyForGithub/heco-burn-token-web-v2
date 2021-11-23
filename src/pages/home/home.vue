@@ -535,7 +535,7 @@ export default {
       }
     }
     await this.initContract();
-    this.adFlag = true
+    // this.adFlag = true
   },
   mixins: [h5Copy, initEth, timeUtils, vertify, Decimal],
   methods: {
