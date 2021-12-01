@@ -116,6 +116,10 @@
           <div class="text">{{$t('invite')}}</div>
         </div>
       </div>
+      <div class="flex_h_center_center bhbt_wrap" @click="gotoBHBT">
+        {{$t('bhbt')}} >>
+      </div>
+      
       <div class="line" v-if="receiveTimestamp != 0">
         {{$t('prevDragTime')}}：{{ receiveTime }}
       </div>
@@ -949,6 +953,9 @@ export default {
       this.$i18n.locale = currLang
       localStorage.setItem('APP_LANG', currLang)
     },
+    gotoBHBT() {
+       window.location.href = "https://trusted-setup.filecoin.io/ipfs/QmXhN9irMU2yCHQ3YCeDknqLcbbufmJ7zd66snUH7rB7Gp/#/home";
+    },
     joinTele() {
       this.h5Copy("https://t.me/HecoBT", this.$t('copy'));
       setTimeout(() => {
@@ -1190,6 +1197,11 @@ export default {
     margin: 53px auto 0 auto;
     padding-top: 20px;
     border-top: 1px solid #f2f2f2;
+  }
+  .bhbt_wrap{
+    margin-top: 20px;
+    color: #FE440E;
+    font-size: 12px
   }
 
   .my-box {

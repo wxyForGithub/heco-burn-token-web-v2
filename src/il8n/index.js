@@ -119,7 +119,8 @@ const messages = {
     leveTips3: '实际转出＝转出数量×（1－手续费）',
     mintNotStart: '现在还不能进行挖矿',
     copy: '复制成功',
-    QQGroup: 'QQ群号'
+    QQGroup: 'QQ群号',
+    bhbt: 'BHBT助力HBT冲击10U，立马去挖'
   },
   en: {
     power: 'My Power HBT',
@@ -239,7 +240,8 @@ const messages = {
     leveTips3: 'Actual transfer = number of transfers x (1 - handling fee)',
     mintNotStart: 'No mining yet',
     copy: 'Success',
-    QQGroup: 'HBT QQ Group'
+    QQGroup: 'HBT QQ Group',
+    bhbt: 'Bhbt helps HBT to impact 10u and dig immediately'
   }
 }
 Vue.use(VueI18n);
